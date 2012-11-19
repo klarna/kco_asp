@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AspUnitRunner</name>
+    </assembly>
+    <members>
+        <member name="T:AspUnitRunner.IRunner">
+            <summary>
+            Runs ASPUnit tests from the given URL and returns test results.
+            </summary>
+        </member>
+        <member name="M:AspUnitRunner.IRunner.WithCredentials(System.Net.ICredentials)">
+            <summary>
+            Sets the network credentials used to authenticate the request
+            and returns the current IRunner instance.
+            </summary>
+            <param name="credentials">The network credentials.</param>
+            <returns>The current IRunner instance.</returns>
+        </member>
+        <member name="M:AspUnitRunner.IRunner.WithEncoding(System.Text.Encoding)">
+            <summary>
+            Sets the default encoding used to encode the request and decode the
+            response and returns the current IRunner instance.
+            </summary>
+            <param name="encoding">The encoding.</param>
+            <returns>The current IRunner instance.</returns>
+            <remarks>A charset in the response headers will take precedence.</remarks>
+        </member>
+        <member name="M:AspUnitRunner.IRunner.WithTestContainer(System.String)">
+            <summary>
+            Sets the name of the test container from which to run tests
+            and returns the current IRunner instance.
+            </summary>
+            <param name="testContainer">The test container.</param>
+            <returns>The current IRunner instance.</returns>
+        </member>
+        <member name="M:AspUnitRunner.IRunner.WithTestContainerAndCase(System.String,System.String)">
+            <summary>
+            Sets the name of the test container and test case to execute
+            and returns the current IRunner object.
+            </summary>
+            <param name="testContainer">The test container containing the test case.</param>
+            <param name="testCase">The test case to execute.</param>
+            <returns>The current IRunner instance.</returns>
+        </member>
+        <member name="M:AspUnitRunner.IRunner.Run">
+            <summary>
+            Runs ASPUnit tests and returns results.
+            </summary>
+            <returns>
+            An AspUnitRunner.IResults instance containing the test results.
+            </returns>
+        </member>
+        <member name="T:AspUnitRunner.IResultDetail">
+            <summary>
+            Contains the detail for a single ASPUnit test result.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResultDetail.Type">
+            <summary>
+            Gets the test result type/status.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResultDetail.Name">
+            <summary>
+            Gets the test name. (TestContainer.TestCase)
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResultDetail.Description">
+            <summary>
+            Gets the test result description.
+            </summary>
+        </member>
+        <member name="T:AspUnitRunner.Core.ResultType">
+            <summary>
+            An enumeration of test result types/statuses.
+            </summary>
+        </member>
+        <member name="F:AspUnitRunner.Core.ResultType.Success">
+            <summary>
+            The test succeeded.
+            </summary>
+        </member>
+        <member name="F:AspUnitRunner.Core.ResultType.Error">
+            <summary>
+            The test resulted in an error.
+            </summary>
+        </member>
+        <member name="F:AspUnitRunner.Core.ResultType.Failure">
+            <summary>
+            The test failed.
+            </summary>
+        </member>
+        <member name="T:AspUnitRunner.IResults">
+            <summary>
+            Contains ASPUnit test results.
+            </summary>
+        </member>
+        <member name="M:AspUnitRunner.IResults.Format">
+            <summary>
+            Returns a string containing formatted test results.
+            </summary>
+            <returns>A string containing formatted test results.</returns>
+        </member>
+        <member name="P:AspUnitRunner.IResults.Tests">
+            <summary>
+            Gets the number of tests run.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResults.Errors">
+            <summary>
+            Gets the number of test errors.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResults.Failures">
+            <summary>
+            Gets the number of test failures.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResults.Successful">
+            <summary>
+            Gets a bool indicating whether all tests ran successfully.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResults.DetailList">
+            <summary>
+            Gets the collection of test details.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.IResults.Html">
+            <summary>
+            Gets the raw HTML test results.
+            </summary>
+            <remarks>
+            May contain a long HTML string which NUnit doesn't format very well.
+            </remarks>
+        </member>
+        <member name="T:AspUnitRunner.Results">
+            <summary>
+            Contains ASPUnit test results.
+            </summary>
+        </member>
+        <member name="M:AspUnitRunner.Results.Format">
+            <summary>
+            Returns a string containing formatted test results.
+            </summary>
+            <returns>A string containing formatted test results.</returns>
+        </member>
+        <member name="P:AspUnitRunner.Results.Tests">
+            <summary>
+            Gets the number of tests run.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.Results.Errors">
+            <summary>
+            Gets the number of test errors.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.Results.Failures">
+            <summary>
+            Gets the number of test failures.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.Results.Successful">
+            <summary>
+            Gets a bool indicating whether all tests ran successfully.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.Results.DetailList">
+            <summary>
+            Gets the collection of test details.
+            </summary>
+        </member>
+        <member name="P:AspUnitRunner.Results.Details">
+            <summary>
+            Use IResults.Format() instead.
+            </summary>
+            <returns>A string containing formatted test results.</returns>
+        </member>
+        <member name="P:AspUnitRunner.Results.Html">
+            <summary>
+            Gets the raw HTML test results.
+            </summary>
+            <remarks>
+            May contain a long HTML string which NUnit doesn't format very well.
+            </remarks>
+        </member>
+        <member name="T:AspUnitRunner.Runner">
+            <summary>
+            Runs ASPUnit tests from the given URL and returns test results.
+            </summary>
+        </member>
+        <member name="M:AspUnitRunner.Runner.Create(System.String)">
+            <summary>
+            Creates a new AspUnitRunner.IRunner instance with the specified address.
+            </summary>
+            <param name="address">The URL for the ASPUnit tests.</param>
+            <returns>A new AspUnitRunner.IRunner instance.</returns>
+        </member>
+        <member name="M:AspUnitRunner.Runner.#ctor(System.String)">
+            <summary>
+            Use Runner.Create() instead.
+            </summary>
+            <param name="baseUri">The URL for the ASPUnit tests.</param>
+        </member>
+        <member name="M:AspUnitRunner.Runner.#ctor(System.String,System.Net.ICredentials)">
+            <summary>
+            Use Runner.Create().WithCredentials() instead.
+            </summary>
+            <param name="baseUri">The URL for the ASPUnit tests.</param>
+            <param name="credentials">The network credentials.</param>
+        </member>
+        <member name="M:AspUnitRunner.Runner.Run(System.String)">
+            <summary>
+            Use IRunner.WithTestContainer() and IRunner.Run() instead.
+            </summary>
+            <param name="testContainer">The test container.</param>
+            <returns>The test results.</returns>
+        </member>
+    </members>
+</doc>

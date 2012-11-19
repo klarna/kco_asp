@@ -1,0 +1,34 @@
+.warning
+{
+    BACKGROUND-COLOR: gold
+}
+.error
+{
+    BACKGROUND-COLOR: indianred
+}
+.success
+{
+    BACKGROUND-COLOR: #33cc33
+}
+BODY
+{
+    FONT-SIZE: 10px;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: lightskyblue
+}
+TABLE
+{
+    FONT-SIZE: 10px
+}
+FORM
+{
+    FONT-SIZE: 10px
+}
+SELECT
+{
+    FONT-SIZE: 10px
+}
+INPUT
+{
+    FONT-SIZE: 10px
+}
