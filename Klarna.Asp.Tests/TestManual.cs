@@ -1,9 +1,11 @@
-﻿using System.Text;
-using NUnit.Framework;
-using AspUnitRunner;
-
-namespace AspUnitRunner.Sample.Tests.NUnit
+﻿namespace Klarna.Asp.Tests
 {
+    using System.Text;
+
+    using NUnit.Framework;
+
+    using AspUnitRunner;
+
     // demonstrates manually specifying test container names for an ASPUnit test suite
     // (one NUnit test per ASPUnit container)
     [TestFixture]
@@ -14,7 +16,7 @@ namespace AspUnitRunner.Sample.Tests.NUnit
         // set the site name as configured in IIS Express (defaults to name of sample web project: AspUnitRunner.Sample.Web)
         private const string AspSiteName = "Klarna.Asp.Tests.Web";
 
-        private IisExpressServer _iisServer;
+        private IisExpressServer iisServer;
 
         [Test]
         public void TestContainer(
@@ -37,14 +39,14 @@ namespace AspUnitRunner.Sample.Tests.NUnit
         [TestFixtureSetUp]
         public void StartServer()
         {
-            //_iisServer = new IisExpressServer(AspSiteName);
-            //_iisServer.Start();
+            iisServer = new IisExpressServer(AspSiteName);
+            iisServer.Start();
         }
 
         [TestFixtureTearDown]
         public void StopServer()
         {
-            //_iisServer.Stop();
+            iisServer.Stop();
         }
     }
 }

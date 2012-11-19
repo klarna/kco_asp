@@ -1,49 +1,49 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
-
-namespace AspUnitRunner.Sample.Tests.NUnit
+﻿namespace Klarna.Asp.Tests
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Threading;
+
     // based on http://www.reimers.dk/jacob-reimers-blog/testing-your-web-application-with-iis-express-and-unit-tests
     public class IisExpressServer : IDisposable
     {
-        private readonly string _siteName;
-        private string _execPath;
-        private Process _iisProcess;
-        private Thread _thread;
+        private readonly string siteName;
+        private string execPath;
+        private Process iisProcess;
+        private Thread thread;
 
         // siteName is the name of the configured web site to start in IIS Express
         public IisExpressServer(string siteName)
         {
-            _siteName = siteName;
+            this.siteName = siteName;
         }
 
         // set path to IIS Express .exe
         public IisExpressServer WithExecPath(string path)
         {
-            _execPath = path;
+            execPath = path;
             return this;
         }
 
         public void Start()
         {
-            _thread = new Thread(StartServer)
+            thread = new Thread(StartServer)
             {
                 IsBackground = true
             };
-            _thread.Start();
+            thread.Start();
         }
 
         public void Stop()
         {
-            if (_iisProcess == null)
+            if (iisProcess == null)
                 return;
-            if (!_iisProcess.HasExited)
-                _iisProcess.CloseMainWindow();
-            _iisProcess.Dispose();
-            _iisProcess = null;
-            _thread = null;
+            if (!iisProcess.HasExited)
+                iisProcess.CloseMainWindow();
+            iisProcess.Dispose();
+            iisProcess = null;
+            thread = null;
         }
 
         public void Dispose()
@@ -54,12 +54,12 @@ namespace AspUnitRunner.Sample.Tests.NUnit
         private void StartServer()
         {
             var fileName = GetIisExpressExecPath();
-            var arguments = string.Format("/site:{0}", _siteName);
+            var arguments = string.Format("/site:{0}", siteName);
 
             try
             {
-                _iisProcess = Process.Start(fileName, arguments);
-                _iisProcess.WaitForExit();
+                iisProcess = Process.Start(fileName, arguments);
+                iisProcess.WaitForExit();
             }
             catch
             {
@@ -72,9 +72,9 @@ namespace AspUnitRunner.Sample.Tests.NUnit
         // %programfiles%\IIS Express\iisexpress.exe
         private string GetIisExpressExecPath()
         {
-            if (string.IsNullOrEmpty(_execPath))
+            if (string.IsNullOrEmpty(execPath))
                 return Path.Combine(GetProgramFilesDir(), @"IIS Express\iisexpress.exe");
-            return _execPath;
+            return execPath;
         }
 
         private static string GetProgramFilesDir()
