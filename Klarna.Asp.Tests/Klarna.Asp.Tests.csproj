@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DigestTest.cs" />
     <Compile Include="IisExpressServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestManual.cs" />

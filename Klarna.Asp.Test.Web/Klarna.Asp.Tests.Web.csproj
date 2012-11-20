@@ -40,15 +40,13 @@
     <Content Include="ASPUnit\index.html" />
     <Content Include="ASPUnit\TestASPUnit\TCTest.asp" />
     <Content Include="ASPUnit\TestASPUnit\TestASPUnit.asp" />
-    <Content Include="includes\StringUtility.inc.asp" />
     <Content Include="Tests\Default.asp" />
     <Content Include="Tests\FailureTest.asp" />
-    <Content Include="Tests\StringUtilityTest.asp" />
+    <Content Include="Tests\DigestTest.asp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />

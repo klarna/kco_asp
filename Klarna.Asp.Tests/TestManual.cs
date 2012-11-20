@@ -21,7 +21,7 @@
         [Test]
         public void TestContainer(
             // set ASPUnit test containers here
-            [Values("StringUtilityTest", "FailureTest")] string testContainer
+            [Values("FailureTest")] string testContainer
         )
         {
             var runner = Runner.Create(AspTestUrl)
