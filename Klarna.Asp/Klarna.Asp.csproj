@@ -39,6 +39,7 @@
     <Content Include="Crypto.asp" />
     <Content Include="Digest.asp" />
     <Content Include="json2.asp" />
+    <Content Include="jsonencode.asp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
