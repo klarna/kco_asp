@@ -96,7 +96,7 @@ End Function
 Function JSONEncodeDict(ByVal elementName, ByVal dict)
 	Dim i, delim
 
-	JSONEncodeDict = """" & JSONEncodeString(elementName) & """:{"
+	JSONEncodeDict = "{"
 	delim = ""
 	For Each i In dict
 		JSONEncodeDict = JSONEncodeDict & delim
