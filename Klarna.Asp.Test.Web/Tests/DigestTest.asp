@@ -1,4 +1,6 @@
 <!-- #include file="../../Klarna.Asp/Digest.asp" -->
+<!-- #include file="../../Klarna.Asp/jsonencode.asp" -->
+
 <%
 '------------------------------------------------------------------------------
 ' Tests the Digest class.
@@ -18,48 +20,39 @@ Class DigestTest
     ' Tests that creation of digest string is correct.
     '--------------------------------------------------------------------------
     Public Sub CreateDigest(testResult)
-        Dim digest
-        Set digest = New Digest
+        Dim article
+        Set article = Server.CreateObject("Scripting.Dictionary")
+        article.Add "artno", "id_1"
+        article.Add "name", "product"
+        article.Add "price", 12345
+        article.Add "vat", 25
+        article.Add "qty", 1
+
+        Dim goodsList(0)
+        set goodsList(0) = article
+
+        Dim data
+        Set data = Server.CreateObject("Scripting.Dictionary")
+        data.Add "eid", 1245
+        data.Add "goods_list", goodsList
+        data.Add "currency", "SEK"
+        data.Add "country", "SWE"
+        data.Add "language", "SV"
 
         Dim json
-        json = "message"
-        
+        json = JSONEncodeDict("", data)
+
+        Dim digest
+        Set digest = New Digest
         Dim actual
-        actual = digest.Create(json)
+        actual = digest.Create(json & "mySecret")
         
         Dim expected
-        expected = "q1MKE+RZFJgrefm34/uplM/R8/si9xzqGvvwK0YMbR0="
+        expected = "MO/6KvzsY2y+F+/SexH7Hyg16gFpsPDx5A2PtLZd0Zs="
         
         Call testResult.AssertEquals(expected, actual, "The digest string")
     End Sub
 
-'------------------------------------------------------------------------------
-' TODO: Sync to testcase in .Net
-'------------------------------------------------------------------------------
-'   var article = new Dictionary<string, object>()
-'   {
-'       { "artno", "id_1" }, 
-'       { "name", "product" }, 
-'       { "price", 12345 }, 
-'       { "vat", 25 }, 
-'       { "qty", 1 }
-'   };
-
-'   var goodsList = new List<Dictionary<string, object>>() { article };
-
-'   var data = new Dictionary<string, object>()
-'   {
-'       { "eid", 1245 }, 
-'       { "goods_list", goodsList }, 
-'       { "currency", "SEK" }, 
-'       { "country", "SWE" }, 
-'       { "language", "SV" }
-'   };
-
-'   var json = JsonConvert.SerializeObject(data);
-
-'   var actual = digest.Create(string.Concat(json, "mySecret"));
-'------------------------------------------------------------------------------
-
 End Class
+
 %>
