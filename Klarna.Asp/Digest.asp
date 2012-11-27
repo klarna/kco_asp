@@ -22,7 +22,7 @@
 Class Digest
 
     '--------------------------------------------------------------------------
-    ' Creates a digest from a string..
+    ' Creates a digest from a string.
     '
     ' Parameters:
     ' string    data    The input data.
