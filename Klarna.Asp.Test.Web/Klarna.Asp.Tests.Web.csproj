@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tests\OrderTest.asp" />
+    <Content Include="Tests\OrderWithConnectorTest.asp" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

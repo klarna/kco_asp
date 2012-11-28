@@ -1,6 +1,4 @@
-﻿<!-- #include file="../MockConnector.asp" -->
-<!-- #include file="../../Klarna.Asp/jsonencode.asp" -->
-<!-- #include file="../../Klarna.Asp/Order.asp" -->
+﻿<!-- #include file="../../Klarna.Asp/jsonencode.asp" -->
 
 <%
 '------------------------------------------------------------------------------
