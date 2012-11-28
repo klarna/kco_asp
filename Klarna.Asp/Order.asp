@@ -112,6 +112,41 @@ Class Order
         Set Marshal = m_resourceData
     End Function
 
+    ' -------------------------------------------------------------------------
+    ' Creates a new order, using the uri in BaseUri.
+    ' -------------------------------------------------------------------------
+    Public Function Create(data)
+        Dim options
+        Set options = Server.CreateObject("Scripting.Dictionary")
+        options.Add "url", m_baseUri
+        options.Add "data", data
+
+        Call m_connector.Apply("POST", Me, options)
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Fetches order data.
+    ' -------------------------------------------------------------------------
+    Public Function Fetch()
+        Dim options
+        Set options = Server.CreateObject("Scripting.Dictionary")
+        options.Add "url", m_location
+
+        Call m_connector.Apply("GET", Me, options)
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Updates order data.
+    ' -------------------------------------------------------------------------
+    Public Function Update(data)
+        Dim options
+        Set options = Server.CreateObject("Scripting.Dictionary")
+        options.Add "url", m_location
+        options.Add "data", data
+
+        Call m_connector.Apply("POST", Me, options)
+    End Function
+
 End Class
 
 %>

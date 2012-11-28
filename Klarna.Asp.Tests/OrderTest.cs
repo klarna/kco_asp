@@ -28,7 +28,7 @@ namespace Klarna.Asp.Tests
     using NUnit.Framework;
 
     /// <summary>
-    /// Tests the ASP Digest class.
+    /// Tests the ASP Order class.
     /// </summary>
     [TestFixture]
     public class OrderTest
