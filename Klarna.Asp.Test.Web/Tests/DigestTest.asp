@@ -1,4 +1,3 @@
-<!-- #include file="../../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../../Klarna.Asp/jsonencode.asp" -->
 
 <%

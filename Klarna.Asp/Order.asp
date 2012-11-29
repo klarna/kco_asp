@@ -58,6 +58,11 @@ Class Order
         m_contentType = ""
     End Sub
 
+    Private Sub Class_Terminate
+        Set m_resourceData = Nothing
+        Set m_connector = Nothing
+    End Sub
+
     ' -------------------------------------------------------------------------
     ' Sets connector to use.
     ' -------------------------------------------------------------------------

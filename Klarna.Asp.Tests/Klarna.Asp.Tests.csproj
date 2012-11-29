@@ -46,6 +46,7 @@
     <Compile Include="DigestTest.cs" />
     <Compile Include="OrderTest.cs" />
     <Compile Include="IisExpressServer.cs" />
+    <Compile Include="UserAgentTest.cs" />
     <Compile Include="OrderWithConnectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
