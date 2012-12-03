@@ -49,6 +49,7 @@
     <Compile Include="UserAgentTest.cs" />
     <Compile Include="OrderWithConnectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BasicConnectorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

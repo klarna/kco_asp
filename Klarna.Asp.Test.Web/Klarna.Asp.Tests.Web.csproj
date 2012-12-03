@@ -41,6 +41,7 @@
     <Content Include="ASPUnit\TestASPUnit\TCTest.asp" />
     <Content Include="ASPUnit\TestASPUnit\TestASPUnit.asp" />
     <Content Include="MockConnector.asp" />
+    <Content Include="Tests\BasicConnectorTest.asp" />
     <Content Include="Tests\Default.asp" />
     <Content Include="Tests\FailureTest.asp" />
     <Content Include="Tests\DigestTest.asp" />

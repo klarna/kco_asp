@@ -13,6 +13,7 @@ Response.Charset = "UTF-8"
 <!-- #include file="OrderTest.asp" -->
 <!-- #include file="OrderWithConnectorTest.asp" -->
 <!-- #include file="UserAgentTest.asp" -->
+<!-- #include file="BasicConnectorTest.asp" -->
 <%
 ' test runner
 Dim runner
@@ -21,6 +22,7 @@ Call runner.AddTestContainer(New DigestTest)
 Call runner.AddTestContainer(New OrderTest)
 Call runner.AddTestContainer(New OrderWithConnectorTest)
 Call runner.AddTestContainer(New UserAgentTest)
+Call runner.AddTestContainer(New BasicConnectorTest)
 
 Call runner.Display()
 %>
