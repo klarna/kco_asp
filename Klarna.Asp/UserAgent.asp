@@ -22,7 +22,7 @@ Class UserAgent
     ' -------------------------------------------------------------------------
     ' Private members
     ' -------------------------------------------------------------------------
-    Private fields
+    Private m_fields
 
     ' -------------------------------------------------------------------------
     ' Class constructor
@@ -32,21 +32,21 @@ Class UserAgent
     ' Library and Language.
     ' -------------------------------------------------------------------------
     Private Sub Class_Initialize
-        Set fields = Server.CreateObject("Scripting.Dictionary")
+        Set m_fields = Server.CreateObject("Scripting.Dictionary")
 
         AddField "Library", "Klarna.ApiWrapper", "1.0", Null
         AddField "Language", "ASP", "Classic", Null
     End Sub
 
     Private Sub Class_Terminate
-        Set fields = Nothing
+        Set m_fields = Nothing
     End Sub
 
     ' -------------------------------------------------------------------------
     ' Adds a field to the field collection.
     ' -------------------------------------------------------------------------
     Public Sub AddField(field, name, version, options)
-        If fields.Exists(field) Then
+        If m_fields.Exists(field) Then
             Err.Raise 457, "UserAgent:AddField", "Field already exists."
         End If
 
@@ -60,14 +60,14 @@ Class UserAgent
         Dim item
         item = field & "/" & name & "_" & version & optionsString
 
-        fields.Add field, item
+        m_fields.Add field, item
     End Sub
 
     ' -------------------------------------------------------------------------
     ' Returns the user agent string.
     ' -------------------------------------------------------------------------
     Public Function ToString()
-        ToString = Join(fields.Items, " ")
+        ToString = Join(m_fields.Items, " ")
     End Function
 End Class
 %>
