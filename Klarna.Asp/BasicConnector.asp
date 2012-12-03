@@ -24,6 +24,27 @@ Class BasicConnector
     ' -------------------------------------------------------------------------
     Private m_userAgent
 
+    ' -------------------------------------------------------------------------
+    ' Class constructor
+    ' -------------------------------------------------------------------------
+    Private Sub Class_Initialize
+        Set m_userAgent = new UserAgent
+    End Sub
+
+    Private Sub Class_Terminate
+    End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Gets or sets the user agent used for User-Agent header.
+    ' -------------------------------------------------------------------------
+    Public Function GetUserAgent()
+        Set GetUserAgent = m_userAgent
+    End Function
+
+    Public Function SetUserAgent(ua)
+        Set m_userAgent = ua
+    End Function
+
 End Class
 
 %>

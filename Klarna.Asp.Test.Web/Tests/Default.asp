@@ -9,6 +9,7 @@ Response.Charset = "UTF-8"
 <!-- #include file="../../Klarna.Asp/Order.asp" -->
 <!-- #include file="../../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../../Klarna.Asp/UserAgent.asp" -->
+<!-- #include file="../../Klarna.Asp/BasicConnector.asp" -->
 <!-- #include file="DigestTest.asp" -->
 <!-- #include file="OrderTest.asp" -->
 <!-- #include file="OrderWithConnectorTest.asp" -->
