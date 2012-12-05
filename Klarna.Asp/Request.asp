@@ -23,7 +23,19 @@ Class Request
     ' -------------------------------------------------------------------------
     ' Private members
     ' -------------------------------------------------------------------------
+    Private m_uri
     Private m_timeout
+
+    ' -------------------------------------------------------------------------
+    ' Gets or sets the uri.
+    ' -------------------------------------------------------------------------
+    Public Function GetUri()
+        GetUri = m_uri
+    End Function
+
+    Public Function SetUri(uri)
+        m_uri = uri
+    End Function
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the number of milliseconds before the connection times out.
