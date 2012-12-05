@@ -36,12 +36,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Response.asp" />
     <Content Include="Crypto.asp" />
     <Content Include="Digest.asp" />
     <Content Include="BasicConnector.asp" />
     <Content Include="json2.asp" />
     <Content Include="jsonencode.asp" />
     <Content Include="Order.asp" />
+    <Content Include="Request.asp" />
     <Content Include="UserAgent.asp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
