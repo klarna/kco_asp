@@ -19,7 +19,7 @@
 ' The HTTP response.
 '------------------------------------------------------------------------------
 
-Class Response
+Class HttpResponse
 End Class
 
 %>
