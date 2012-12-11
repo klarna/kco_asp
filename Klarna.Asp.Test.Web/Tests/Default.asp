@@ -10,11 +10,13 @@ Response.Charset = "UTF-8"
 <!-- #include file="../../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../../Klarna.Asp/UserAgent.asp" -->
 <!-- #include file="../../Klarna.Asp/BasicConnector.asp" -->
+<!-- #include file="../../Klarna.Asp/HttpRequest.asp" -->
 <!-- #include file="DigestTest.asp" -->
 <!-- #include file="OrderTest.asp" -->
 <!-- #include file="OrderWithConnectorTest.asp" -->
 <!-- #include file="UserAgentTest.asp" -->
 <!-- #include file="BasicConnectorTest.asp" -->
+<!-- #include file="HttpRequestTest.asp" -->
 <%
 ' test runner
 Dim runner
@@ -24,6 +26,7 @@ Call runner.AddTestContainer(New OrderTest)
 Call runner.AddTestContainer(New OrderWithConnectorTest)
 Call runner.AddTestContainer(New UserAgentTest)
 Call runner.AddTestContainer(New BasicConnectorTest)
+Call runner.AddTestContainer(New HttpRequestTest)
 
 Call runner.Display()
 %>

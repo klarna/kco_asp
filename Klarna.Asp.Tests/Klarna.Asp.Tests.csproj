@@ -50,6 +50,7 @@
     <Compile Include="OrderWithConnectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BasicConnectorTest.cs" />
+    <Compile Include="HttpRequestTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
