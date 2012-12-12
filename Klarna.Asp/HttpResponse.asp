@@ -20,6 +20,57 @@
 '------------------------------------------------------------------------------
 
 Class HttpResponse
+    ' -------------------------------------------------------------------------
+    ' Private members
+    ' -------------------------------------------------------------------------
+    Private m_headers
+    Private m_status
+    Private m_data
+
+    ' -------------------------------------------------------------------------
+    ' Class constructor
+    '
+    ' Initializes a new instance of the Request class.
+    ' -------------------------------------------------------------------------
+    Private Sub Class_Initialize
+        Set m_headers = Server.CreateObject("Scripting.Dictionary")
+        m_status = 0
+        m_data = ""
+    End Sub
+
+    Private Sub Class_Terminate
+        Set m_headers = Nothing
+    End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Gets the HTTP status code.
+    ' -------------------------------------------------------------------------
+    Public Function GetStatus()
+        GetStatus = m_status
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Gets the headers for the response.
+    ' -------------------------------------------------------------------------
+
+    Public Function GetHeader(name)
+        If m_headers.Exists(name) Then
+            GetHeader = m_headers.Item(name)
+        Else
+            GetHeader = ""
+        End If
+    End Function
+
+    Public Function GetHeaders()
+        Set GetHeaders = m_headers
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Gets the data (payload) for the response.
+    ' -------------------------------------------------------------------------
+    Public Function GetData()
+        GetData = m_data
+    End Function
 End Class
 
 %>
