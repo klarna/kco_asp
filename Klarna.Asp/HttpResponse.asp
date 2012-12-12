@@ -43,6 +43,15 @@ Class HttpResponse
     End Sub
 
     ' -------------------------------------------------------------------------
+    ' Creates the HttpResponse.
+    ' -------------------------------------------------------------------------
+    Public Sub Create(status, headers, data)
+        m_status = CInt(status)
+        Set m_headers = headers
+        m_data = data
+    End Sub
+
+    ' -------------------------------------------------------------------------
     ' Gets the HTTP status code.
     ' -------------------------------------------------------------------------
     Public Function GetStatus()
