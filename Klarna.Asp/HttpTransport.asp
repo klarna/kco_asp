@@ -47,5 +47,17 @@ Class HttpTransport
     Public Function SetTimeout(timeout)
         m_timeout = timeout
     End Function
+
+    ' -------------------------------------------------------------------------
+    ' Creates a HttpRequest.
+    ' -------------------------------------------------------------------------
+    Public Function CreateRequest(uri)
+        Dim hr
+        Set hr = New HttpRequest
+        hr.SetUri(uri)
+
+        Set CreateRequest = hr
+    End Function
+
 End Class
 %>
