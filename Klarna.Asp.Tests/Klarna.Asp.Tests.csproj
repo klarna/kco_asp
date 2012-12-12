@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="DigestTest.cs" />
     <Compile Include="HttpResponseTest.cs" />
+    <Compile Include="HttpTransportTest.cs" />
     <Compile Include="OrderTest.cs" />
     <Compile Include="IisExpressServer.cs" />
     <Compile Include="UserAgentTest.cs" />

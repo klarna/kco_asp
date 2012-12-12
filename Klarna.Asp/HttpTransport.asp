@@ -19,6 +19,33 @@
 ' The HTTP transport.
 '------------------------------------------------------------------------------
 
-Class Transport
+Class HttpTransport
+    ' -------------------------------------------------------------------------
+    ' Private members
+    ' -------------------------------------------------------------------------
+    Private m_timeout
+
+    ' -------------------------------------------------------------------------
+    ' Class constructor
+    '
+    ' Initializes a new instance of the HttpTransport class.
+    ' -------------------------------------------------------------------------
+    Private Sub Class_Initialize
+        m_timeout = 5000
+    End Sub
+
+    Private Sub Class_Terminate
+    End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Gets or sets the number of milliseconds before the connection times out.
+    ' -------------------------------------------------------------------------
+    Public Function GetTimeout()
+        GetTimeout = m_timeout
+    End Function
+
+    Public Function SetTimeout(timeout)
+        m_timeout = timeout
+    End Function
 End Class
 %>

@@ -44,7 +44,7 @@
     <Content Include="jsonencode.asp" />
     <Content Include="Order.asp" />
     <Content Include="HttpRequest.asp" />
-    <Content Include="Transport.asp" />
+    <Content Include="HttpTransport.asp" />
     <Content Include="UserAgent.asp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
