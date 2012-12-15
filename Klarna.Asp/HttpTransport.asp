@@ -59,5 +59,35 @@ Class HttpTransport
         Set CreateRequest = hr
     End Function
 
+    ' -------------------------------------------------------------------------
+    ' Performs a HTTP request.
+    ' -------------------------------------------------------------------------
+    Public Function Send(httpRequest)
+        Dim xmlHttp
+        Set xmlhttp = Server.CreateObject("MSXML2.ServerXMLHTTP")
+
+        xmlhttp.open httpRequest.GetMethod, httpRequest.GetUri, false
+
+        Dim headers
+        Set headers = httpRequest.GetHeaders
+        Dim key
+        Dim requestHeaders
+        For Each key in headers.Keys
+            xmlHttp.setRequestHeader key, headers.Item(key)
+        Next
+
+        If httpRequest.GetMethod = "POST" Then
+            xmlhttp.send(httpRequest.GetData)
+        Else
+            xmlhttp.send()
+        End If
+
+        Dim result
+        Set result = New HttpResponse
+        result.Create xmlHttp.status, xmlHttp.getAllResponseHeaders, xmlHttp.responseText
+
+        Set Send = result
+    End Function
+
 End Class
 %>

@@ -47,7 +47,7 @@ Class HttpResponse
     ' -------------------------------------------------------------------------
     Public Sub Create(status, headers, data)
         m_status = CInt(status)
-        Set m_headers = headers
+        'Set m_headers = headers
         m_data = data
     End Sub
 
