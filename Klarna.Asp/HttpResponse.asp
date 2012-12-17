@@ -82,7 +82,9 @@ Class HttpResponse
     End Function
 
     '--------------------------------------------------------------------------
-    '
+    ' Parses headers from one string.
+    ' Assumes that each header is separated by vbCrLf and name / value pairs
+    ' are separated by :
     '--------------------------------------------------------------------------
     Private Sub ParseHeaders(headerString)
         m_headers.RemoveAll
