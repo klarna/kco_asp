@@ -47,7 +47,7 @@ Class HttpResponse
     ' -------------------------------------------------------------------------
     Public Sub Create(status, headers, data)
         m_status = CInt(status)
-        'Set m_headers = headers
+        ParseHeaders headers
         m_data = data
     End Sub
 
@@ -80,6 +80,24 @@ Class HttpResponse
     Public Function GetData()
         GetData = m_data
     End Function
+
+    '--------------------------------------------------------------------------
+    '
+    '--------------------------------------------------------------------------
+    Private Sub ParseHeaders(headerString)
+        m_headers.RemoveAll
+
+        Dim headers
+        headers = Split(headerString, vbCrLf)
+        Dim header
+        Dim keyValue
+        keyValue = 1
+        For Each header in headers
+            'keyValue = Split(header, ":")
+            m_headers.Add keyValue, header
+            keyValue = keyValue + 1
+        Next
+    End Sub
 End Class
 
 %>
