@@ -91,11 +91,11 @@ Class HttpResponse
         headers = Split(headerString, vbCrLf)
         Dim header
         Dim keyValue
-        keyValue = 1
         For Each header in headers
-            'keyValue = Split(header, ":")
-            m_headers.Add keyValue, header
-            keyValue = keyValue + 1
+            If Len(header) > 2 And InStr(header, ":") Then
+                keyValue = Split(header, ":")
+                m_headers.Add Trim(keyValue(0)), Trim(keyValue(1))
+            End If
         Next
     End Sub
 End Class

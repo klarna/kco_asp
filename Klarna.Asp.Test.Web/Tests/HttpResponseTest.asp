@@ -37,7 +37,7 @@ Class HttpResponseTest
         Dim headers
         headers = "Content-Type:application/json" & vbCrLf & _
                   "Accept-Charset:utf-8"  & vbCrLf & _
-                  "Server: Microsoft-IIS/8.0"
+                  "Server: Microsoft-IIS/8.0" & vbCrLf & ":"
 
         Dim data
         data = "{""Brand"":""Volvo""}"

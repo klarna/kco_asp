@@ -66,6 +66,11 @@ Class HttpTransport
         Dim xmlHttp
         Set xmlhttp = Server.CreateObject("MSXML2.ServerXMLHTTP")
 
+        const RESOLVE_TIMEOUT = 30000
+        const SEND_TIMEOUT = 30000
+        const RECEIVE_TIMEOUT =30000
+        xmlHttp.setTimeouts RESOLVE_TIMEOUT, m_timeout, SEND_TIMEOUT, RECEIVE_TIMEOUT
+
         xmlhttp.open httpRequest.GetMethod, httpRequest.GetUri, false
 
         Dim headers
