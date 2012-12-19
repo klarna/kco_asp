@@ -28,10 +28,10 @@
 '--------------------------------------------------------------------------
 Public Function CreateBasicConnector(httpTransport, digest, secret)
     Dim connector
-    Set connector = new BasiConnector
-    connector.SetHttpTransport(httpTransport)
-    connector.SetDigest(digest)
-    connector.SetSecret(secret)
+    Set connector = new BasicConnector
+    connector.SetHttpTransport httpTransport
+    connector.SetDigest digest
+    connector.SetSecret secret
 
     Set CreateBasicConnector = connector
 End Function
@@ -85,7 +85,107 @@ Class BasicConnector
     ' Applies a HTTP method on a specific resource.
     ' -------------------------------------------------------------------------
     Public Function Apply(httpMethod, order, options)
-        ' Call Handle(...)
+        Handle httpMethod, order, options, "new List<Uri>()"
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Handles a HTTP request.
+    ' -------------------------------------------------------------------------
+    Private Function Handle(httpMethod, order, options, visitedUrl)
+        Dim url
+        url = GetUrl(order, options)
+
+        Dim payLoad
+        payLoad = ""
+        If httpMethod = "POST" Then
+            payLoad = GetData(order, options)
+        End If
+
+        Dim hr
+        Set hr = CreateRequest(order, httpMethod, payLoad, url)
+
+        'Dim response
+        'response = m_httpTransport.Send(request)
+
+        'return HandleResponse(response, method, resource, visitedUrl);
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Gets the url to use, from options or resource.
+    ' -------------------------------------------------------------------------
+    Private Function GetUrl(order, options)
+        const URL_KEY = "url"
+
+        Dim urlInOptions
+        urlInOptions = False
+        If IsObject(options) Then
+            If options.Exists(URL_KEY) Then
+                urlInOptions = True
+            End If
+        End If
+
+        Dim url
+        If urlInOptions Then
+            url = options.Item(URL_KEY)
+        Else
+            url = order.GetLocation
+        End If
+
+        GetUrl = url
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Gets data to use, from options or resource.
+    ' Data is in JSON format.
+    ' -------------------------------------------------------------------------
+    Private Function GetData(order, options)
+        const DATA_KEY = "url"
+
+        Dim dataInOptions
+        dataInOptions = False
+        If IsObject(options) Then
+            If options.Exists(DATA_KEY) Then
+                dataInOptions = True
+            End If
+        End If
+
+        Dim data
+        If dataInOptions Then
+            Dim dictionaryData
+            Set dictionaryData = options.Item(URL_KEY)
+
+            data = JSONEncodeDict("", dictionaryData)
+        Else
+            data = order.Marshal
+        End If
+
+        GetData = data
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Creates a request.
+    ' -------------------------------------------------------------------------
+    Private Function CreateRequest(order, httpMethod, payLoad, url)
+        ' Create the request with correct method to use
+        Dim request
+        Set request = m_httpTransport.CreateRequest(url)
+        request.SetMethod httpMethod
+
+        ' Set HTTP Headers
+        'request.UserAgent = UserAgent.ToString();
+
+        'var digestString = digest.Create(string.Concat(payLoad, secret));
+        'var authorization = string.Format("Klarna {0}", digestString);
+        'request.Headers.Add("Authorization", authorization);
+
+        '    request.Accept = resource.ContentType;
+
+        'if (payLoad.Length > 0)
+        '{
+        '    request.ContentType = resource.ContentType;
+        '}
+
+        Set CreateRequest = request
     End Function
 
 End Class

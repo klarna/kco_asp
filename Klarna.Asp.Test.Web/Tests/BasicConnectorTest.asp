@@ -73,6 +73,7 @@ Class BasicConnectorTest
         Dim options
         Set options = Server.CreateObject("Scripting.Dictionary")
         options.Add "url", "http://klarna.com"
+        
         Call connector.Apply("GET", order, options)
 
         Call testResult.AssertEquals("http://klarna.com", transport.m_request.GetUri, "")
