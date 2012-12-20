@@ -1,4 +1,6 @@
-﻿<%
+﻿<!-- #include file="json2.asp" -->
+
+<%
 '------------------------------------------------------------------------------
 '   Copyright 2012 Klarna AB
 '   Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,11 +103,11 @@ Class BasicConnector
             payLoad = GetData(order, options)
         End If
 
-        Dim hr
-        Set hr = CreateRequest(order, httpMethod, payLoad, url)
+        Dim request
+        Set request = CreateRequest(order, httpMethod, payLoad, url)
 
-        'Dim response
-        'response = m_httpTransport.Send(request)
+        Dim response
+        Set response = m_httpTransport.Send(request)
 
         'return HandleResponse(response, method, resource, visitedUrl);
     End Function
@@ -139,7 +141,7 @@ Class BasicConnector
     ' Data is in JSON format.
     ' -------------------------------------------------------------------------
     Private Function GetData(order, options)
-        const DATA_KEY = "url"
+        const DATA_KEY = "data"
 
         Dim dataInOptions
         dataInOptions = False
@@ -152,11 +154,13 @@ Class BasicConnector
         Dim data
         If dataInOptions Then
             Dim dictionaryData
-            Set dictionaryData = options.Item(URL_KEY)
+            Set dictionaryData = options.Item(DATA_KEY)
 
             data = JSONEncodeDict("", dictionaryData)
         Else
-            data = order.Marshal
+            Dim marshalData
+            Set marshalData = order.Marshal
+            data = JSON.stringify(marshalData)
         End If
 
         GetData = data
@@ -172,18 +176,21 @@ Class BasicConnector
         request.SetMethod httpMethod
 
         ' Set HTTP Headers
-        'request.UserAgent = UserAgent.ToString();
+        request.SetHeader "User-Agent", m_userAgent.ToString
 
-        'var digestString = digest.Create(string.Concat(payLoad, secret));
-        'var authorization = string.Format("Klarna {0}", digestString);
-        'request.Headers.Add("Authorization", authorization);
+        Dim digestString
+        digestString = m_digest.Create(payLoad & m_secret)
 
-        '    request.Accept = resource.ContentType;
+        Dim authorization
+        authorization = "Klarna " & digestString
+        request.SetHeader "Authorization", authorization
 
-        'if (payLoad.Length > 0)
-        '{
-        '    request.ContentType = resource.ContentType;
-        '}
+        request.SetHeader "Accept", order.GetContentType
+
+        If Len(payLoad) > 0 Then
+            request.SetHeader "Content-Type", order.GetContentType
+            request.SetData payLoad
+        End If
 
         Set CreateRequest = request
     End Function

@@ -5,9 +5,11 @@
 Class BasicConnectorTest
     Private m_transport
     Private m_connector
+    Private m_url
 
     Public Function TestCaseNames()
-        TestCaseNames = Array("UserAgent", "ApplyUrlInResource", "ApplyUrlInOptions")
+        TestCaseNames = Array("UserAgent", "ApplyUrlInResource", "ApplyUrlInOptions", _
+            "ApplyDataInResource", "ApplyDataInOptions")
     End Function
 
     Public Sub SetUp()
@@ -15,6 +17,7 @@ Class BasicConnectorTest
         Dim digest
         Set digest = New Digest
         Set m_connector = CreateBasicConnector(m_transport, digest, "My Secret")
+        m_url = "http://klarna.com"
     End Sub
 
     Public Sub TearDown()
@@ -45,9 +48,11 @@ Class BasicConnectorTest
     Public Sub ApplyUrlInResource(testResult)
         Dim order
         Set order = New Order
-        order.SetLocation "http://klarna.com"
+        order.SetLocation m_url
 
         Set m_transport.m_request = New HttpRequest
+        Set m_transport.m_response = New HttpResponse
+        m_transport.m_response.Create 200, "", ""
 
         Call m_connector.Apply("GET", order, Null)
 
@@ -59,13 +64,15 @@ Class BasicConnectorTest
     '--------------------------------------------------------------------------
     Public Sub ApplyUrlInOptions(testResult)
         Set m_transport.m_request = New HttpRequest
+        Set m_transport.m_response = New HttpResponse
+        m_transport.m_response.Create 200, "", ""
 
         Dim order
         Set order = New Order
 
         Dim options
         Set options = Server.CreateObject("Scripting.Dictionary")
-        options.Add "url", "http://klarna.com"
+        options.Add "url", m_url
         
         Call m_connector.Apply("GET", order, options)
 
@@ -76,12 +83,51 @@ Class BasicConnectorTest
     ' Tests that Apply uses data in resource.
     '--------------------------------------------------------------------------
     Public Sub ApplyDataInResource(testResult)
+        Dim order
+        Set order = New Order
+        order.SetLocation m_url
+
+        Set m_transport.m_request = New HttpRequest
+        Set m_transport.m_response = New HttpResponse
+        Dim jsonData
+        jsonData = "{""Year"":2012}"
+        m_transport.m_response.Create 200, "", jsonData
+
+        order.Parse jsonData
+        
+        Dim options
+        Set options = Server.CreateObject("Scripting.Dictionary")
+
+        Call m_connector.Apply("POST", order, Null)
+
+        Call testResult.AssertEquals(jsonData, m_transport.m_requestInSend.GetData, "")
     End Sub
 
     '--------------------------------------------------------------------------
     ' Tests that Apply uses data in options.
     '--------------------------------------------------------------------------
     Public Sub ApplyDataInOptions(testResult)
+        Dim order
+        Set order = New Order
+        order.SetLocation m_url
+
+        Set m_transport.m_request = New HttpRequest
+        Set m_transport.m_response = New HttpResponse
+        Dim jsonData
+        jsonData = "{""Year"":2012}"
+        m_transport.m_response.Create 200, "", jsonData
+
+        Dim data
+        Set data = Server.CreateObject("Scripting.Dictionary")
+        data.Add "Year", 2012
+        
+        Dim options
+        Set options = Server.CreateObject("Scripting.Dictionary")
+        options.Add "data", data
+
+        Call m_connector.Apply("POST", order, options)
+
+        Call testResult.AssertEquals(jsonData, m_transport.m_requestInSend.GetData, "")
     End Sub
 
 End Class
