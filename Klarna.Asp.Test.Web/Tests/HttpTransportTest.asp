@@ -67,7 +67,6 @@ Class HttpTransportTest
 
             Call testResult.AssertEquals(errorCode, result.GetStatus, "")
             Call testResult.AssertEquals("keep-alive", result.GetHeader("Connection"), "Connection")
-            Call testResult.AssertEquals("gunicorn/0.13.4", result.GetHeader("Server"), "Server")
         Next
     End Sub
 
