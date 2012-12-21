@@ -109,7 +109,7 @@ Class BasicConnector
         Dim response
         Set response = m_httpTransport.Send(request)
 
-        'return HandleResponse(response, method, resource, visitedUrl);
+        Set Handle = HandleResponse(response, httpMethod, order, visitedUrl)
     End Function
 
     ' -------------------------------------------------------------------------
@@ -194,6 +194,26 @@ Class BasicConnector
 
         Set CreateRequest = request
     End Function
+
+    ' -------------------------------------------------------------------------
+    ' Handle response based on status.
+    ' -------------------------------------------------------------------------
+    Private Function HandleResponse(response, httpMethod, order, visitedUrl)
+        VerifyResponse response
+
+        Set HandleResponse = response
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Method to verify the response.
+    ' -------------------------------------------------------------------------
+    Private Sub VerifyResponse(response)
+        Dim statusCode
+        statusCode = response.GetStatus
+        If statusCode >= 400 And statusCode <= 599 Then
+            Err.Raise statusCode, "HTTP error code"
+        End If
+    End Sub
 
 End Class
 

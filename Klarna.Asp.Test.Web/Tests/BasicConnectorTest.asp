@@ -6,10 +6,13 @@ Class BasicConnectorTest
     Private m_transport
     Private m_connector
     Private m_url
+    Private m_contentType
+    Private m_errorCodes
 
     Public Function TestCaseNames()
         TestCaseNames = Array("UserAgent", "ApplyUrlInResource", "ApplyUrlInOptions", _
-            "ApplyDataInResource", "ApplyDataInOptions")
+            "ApplyDataInResource", "ApplyDataInOptions", "ApplyGetError", _
+            "ApplyPostError")
     End Function
 
     Public Sub SetUp()
@@ -18,6 +21,9 @@ Class BasicConnectorTest
         Set digest = New Digest
         Set m_connector = CreateBasicConnector(m_transport, digest, "My Secret")
         m_url = "http://klarna.com"
+        m_contentType = "application/vnd.klarna.checkout.aggregated-order-v2+json"
+        m_errorCodes = Array(400, 401, 402, 403, 404, 406, 409, 412, 415, 422, _
+            428, 429, 500, 502, 503)
     End Sub
 
     Public Sub TearDown()
@@ -128,6 +134,67 @@ Class BasicConnectorTest
         Call m_connector.Apply("POST", order, options)
 
         Call testResult.AssertEquals(jsonData, m_transport.m_requestInSend.GetData, "")
+    End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests Apply with GET method, with status code that is expected raise
+    ' an error
+    '--------------------------------------------------------------------------
+    Public Sub ApplyGetError(testResult)
+        On Error Resume Next
+
+        Dim errorCode
+        For Each errorCode in m_errorCodes
+            Dim order
+            Set order = New Order
+            order.SetLocation m_url
+            order.SetContentType m_contentType
+
+            Set m_transport.m_request = New HttpRequest
+            Set m_transport.m_response = New HttpResponse
+            m_transport.m_response.Create errorCode, "", "{""Year"":2012}"
+
+            Dim options
+            Set options = Server.CreateObject("Scripting.Dictionary")
+
+            Call m_connector.Apply("GET", order, options)
+
+            Call testResult.AssertEquals(errorCode, Err.Number, "")
+            Err.Clear()
+        Next
+    End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests Apply with POST method, with status code that is expected raise
+    ' an error
+    '--------------------------------------------------------------------------
+    Public Sub ApplyPostError(testResult)
+        On Error Resume Next
+
+        Dim errorCode
+        For Each errorCode in m_errorCodes
+            Dim order
+            Set order = New Order
+            order.SetLocation m_url
+            order.SetContentType m_contentType
+
+            Set m_transport.m_request = New HttpRequest
+            Set m_transport.m_response = New HttpResponse
+            m_transport.m_response.Create errorCode, "", "{""Year"":2012}"
+
+            Dim data
+            Set data = Server.CreateObject("Scripting.Dictionary")
+            data.Add "Year", 2012
+        
+            Dim options
+            Set options = Server.CreateObject("Scripting.Dictionary")
+            options.Add "data", data
+
+            Call m_connector.Apply("GET", order, options)
+
+            Call testResult.AssertEquals(errorCode, Err.Number, "")
+            Err.Clear()
+        Next
     End Sub
 
 End Class
