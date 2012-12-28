@@ -19,6 +19,7 @@ Response.Charset = "UTF-8"
 <!-- #include file="OrderWithConnectorTest.asp" -->
 <!-- #include file="UserAgentTest.asp" -->
 <!-- #include file="BasicConnectorTest.asp" -->
+<!-- #include file="BasicConnectorGetTest.asp" -->
 <!-- #include file="HttpRequestTest.asp" -->
 <!-- #include file="HttpResponseTest.asp" -->
 <!-- #include file="HttpTransportTest.asp" -->
@@ -31,6 +32,7 @@ Call runner.AddTestContainer(New OrderTest)
 Call runner.AddTestContainer(New OrderWithConnectorTest)
 Call runner.AddTestContainer(New UserAgentTest)
 Call runner.AddTestContainer(New BasicConnectorTest)
+Call runner.AddTestContainer(New BasicConnectorGetTest)
 Call runner.AddTestContainer(New HttpRequestTest)
 Call runner.AddTestContainer(New HttpResponseTest)
 Call runner.AddTestContainer(New HttpTransportTest)
