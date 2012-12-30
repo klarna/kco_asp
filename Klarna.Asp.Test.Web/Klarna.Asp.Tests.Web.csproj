@@ -44,6 +44,7 @@
     <Content Include="MockConnector.asp" />
     <Content Include="Tests\BasicConnectorTest.asp" />
     <Content Include="Tests\BasicConnectorGetTest.asp" />
+    <Content Include="Tests\BasicConnectorPostTest.asp" />
     <Content Include="Tests\HttpTransportTest.asp" />
     <Content Include="Tests\HttpResponseTest.asp" />
     <Content Include="Tests\HttpRequestTest.asp" />
