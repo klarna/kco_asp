@@ -230,7 +230,13 @@ Class BasicConnector
                 Exit Function
             End If
         ElseIf statusCode = 302 Then    ' Redirect if method is GET.
+            If httpMethod = "GET" Then
+                Set HandleResponse = MakeRedirect(order, visitedUrl, uri)
+                Exit Function
+            End If
         ElseIf statusCode = 303 Then    ' Redirect with GET, even if request is POST.
+            Set HandleResponse = MakeRedirect(order, visitedUrl, uri)
+            Exit Function
         End If
 
         Set HandleResponse = response
