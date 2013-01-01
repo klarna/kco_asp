@@ -84,7 +84,7 @@ Class HttpResponse
     '--------------------------------------------------------------------------
     ' Parses headers from one string.
     ' Assumes that each header is separated by vbCrLf and name / value pairs
-    ' are separated by :
+    ' are separated by first occurence of :
     '--------------------------------------------------------------------------
     Private Sub ParseHeaders(headerString)
         m_headers.RemoveAll
@@ -92,11 +92,12 @@ Class HttpResponse
         Dim headers
         headers = Split(headerString, vbCrLf)
         Dim header
-        Dim keyValue
         For Each header in headers
-            If Len(header) > 2 And InStr(header, ":") Then
-                keyValue = Split(header, ":")
-                m_headers.Add Trim(keyValue(0)), Trim(keyValue(1))
+            Dim splitPosition
+            splitPosition = InStr(header, ":")
+            If Len(header) > 2 And splitPosition > 0 Then
+                m_headers.Add Trim(Left(header, splitPosition-1)), _
+                    Trim(Right(header, Len(header) - splitPosition))
             End If
         Next
     End Sub

@@ -201,6 +201,9 @@ Class BasicConnector
     Private Function HandleResponse(response, httpMethod, order, visitedUrl)
         VerifyResponse response
 
+        Dim uri
+        uri = response.GetHeader("Location")
+
         Dim statusCode
         statusCode = response.GetStatus()
         If statusCode = 200 Then        ' Update Data on resource.
@@ -216,6 +219,7 @@ Class BasicConnector
                 Err.Raise Err.Number, "Connector error", "Bad format on response content."
             End If
         ElseIf statusCode = 201 Then    ' Update location.
+            order.SetLocation uri
         ElseIf statusCode = 301 Then    ' Update location and redirect if method is GET.
         ElseIf statusCode = 302 Then    ' Redirect if method is GET.
         ElseIf statusCode = 303 Then    ' Redirect with GET, even if request is POST.

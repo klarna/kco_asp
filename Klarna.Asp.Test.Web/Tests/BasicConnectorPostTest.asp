@@ -12,7 +12,8 @@ Class BasicConnectorPostTest
     Private m_responseData
 
     Public Function TestCaseNames()
-        TestCaseNames = Array("ApplyPost200", "ApplyPost200InvalidJson")
+        TestCaseNames = Array("ApplyPost200", "ApplyPost200InvalidJson", _
+            "ApplyPost201UpdatedLocation")
     End Function
 
     Public Sub SetUp()
@@ -93,6 +94,50 @@ Class BasicConnectorPostTest
         Err.Clear()
     End Sub
 
+    '--------------------------------------------------------------------------
+    ' Tests Apply with POST method and status 201 return.
+    ' Verifies that location is updated.
+    '--------------------------------------------------------------------------
+    Public Sub ApplyPost201UpdatedLocation(testResult)
+        Dim order
+        Set order = New Order
+        order.SetLocation m_url
+        order.SetContentType m_contentType
+        order.Parse m_responseData
+
+        Set m_transport.m_request = New HttpRequest
+        Dim updatedLocation
+        updatedLocation = "http://NewLocation.com"
+        Set m_transport.m_response = New HttpResponse
+        m_transport.m_response.Create 201, "Location:" & updatedLocation, m_responseData
+
+        Call m_connector.Apply("POST", order, Null)
+
+        Call testResult.AssertEquals("POST", m_transport.m_requestInSend.GetMethod(), "")
+        
+        Call testResult.AssertEquals(m_connector.GetUserAgent().ToString(), _
+            m_transport.m_requestInSend.GetHeader("User-Agent"), "")
+        
+        Dim digestString
+        digestString = m_digest.Create(m_responseData & m_secret)
+        Dim authorization
+        authorization = "Klarna " & digestString
+        Call testResult.AssertEquals(authorization, _
+            m_transport.m_requestInSend.GetHeader("Authorization"), "")
+        
+        Call testResult.AssertEquals(m_contentType, _
+            m_transport.m_requestInSend.GetHeader("Accept"), "")
+
+        Call testResult.AssertEquals(m_contentType, _
+            m_transport.m_requestInSend.GetHeader("Content-Type"), "")
+
+        Call testResult.AssertEquals(updatedLocation, order.GetLocation, "")
+
+        Dim orderData
+        Set orderData = order.Marshal
+        Call testResult.AssertEquals(m_responseData, JSON.stringify(orderData), "")
+
+    End Sub
 
 End Class
 
