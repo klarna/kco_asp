@@ -39,7 +39,7 @@ Class BasicConnectorPostTest
         Set order = New Order
         order.SetLocation m_url
         order.SetContentType m_contentType
-        order.Parse m_responseData
+        order.Parse "{}"
 
         Set m_transport.m_request = New HttpRequest
         Set m_transport.m_response = New HttpResponse
@@ -53,7 +53,7 @@ Class BasicConnectorPostTest
             m_transport.m_requestInSend.GetHeader("User-Agent"), "")
         
         Dim digestString
-        digestString = m_digest.Create(m_responseData & m_secret)
+        digestString = m_digest.Create("{}" & m_secret)
         Dim authorization
         authorization = "Klarna " & digestString
         Call testResult.AssertEquals(authorization, _
@@ -81,7 +81,7 @@ Class BasicConnectorPostTest
         Set order = New Order
         order.SetLocation m_url
         order.SetContentType m_contentType
-        order.Parse m_responseData
+        order.Parse "{}"
 
         Set m_transport.m_request = New HttpRequest
         Set m_transport.m_response = New HttpResponse
@@ -103,7 +103,7 @@ Class BasicConnectorPostTest
         Set order = New Order
         order.SetLocation m_url
         order.SetContentType m_contentType
-        order.Parse m_responseData
+        order.Parse "{}"
 
         Set m_transport.m_request = New HttpRequest
         Dim updatedLocation
@@ -119,7 +119,7 @@ Class BasicConnectorPostTest
             m_transport.m_requestInSend.GetHeader("User-Agent"), "")
         
         Dim digestString
-        digestString = m_digest.Create(m_responseData & m_secret)
+        digestString = m_digest.Create("{}" & m_secret)
         Dim authorization
         authorization = "Klarna " & digestString
         Call testResult.AssertEquals(authorization, _
@@ -135,7 +135,7 @@ Class BasicConnectorPostTest
 
         Dim orderData
         Set orderData = order.Marshal
-        Call testResult.AssertEquals(m_responseData, JSON.stringify(orderData), "")
+        Call testResult.AssertEquals("{}", JSON.stringify(orderData), "")
 
     End Sub
 
