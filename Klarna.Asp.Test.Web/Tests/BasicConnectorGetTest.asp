@@ -12,7 +12,8 @@ Class BasicConnectorGetTest
     Private m_responseData
 
     Public Function TestCaseNames()
-        TestCaseNames = Array("ApplyGet200", "ApplyGet200InvalidJson")
+        TestCaseNames = Array("ApplyGet200", "ApplyGet200InvalidJson", _
+            "ApplyGet301InfiniteLoop")
     End Function
 
     Public Sub SetUp()
@@ -91,6 +92,27 @@ Class BasicConnectorGetTest
         Err.Clear()
     End Sub
 
+    '--------------------------------------------------------------------------
+    ' Tests Apply with GET method and status 301 return and infinite redirect loop.
+    '--------------------------------------------------------------------------
+    Public Sub ApplyGet301InfiniteLoop(testResult)
+        On Error Resume Next
+
+        Dim order
+        Set order = New Order
+        order.SetLocation m_url
+        order.SetContentType m_contentType
+
+        Set m_transport.m_request = New HttpRequest
+        Set m_transport.m_response = New HttpResponse
+        m_transport.m_response.Create 301, "Location:" & m_url, m_responseData
+
+        Call m_connector.Apply("GET", order, Null)
+
+        Call testResult.AssertEquals("Infinite redirect loop detected.", Err.Description, "")
+
+        Err.Clear()
+    End Sub
 
 End Class
 

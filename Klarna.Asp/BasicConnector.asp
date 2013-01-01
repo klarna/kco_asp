@@ -87,7 +87,10 @@ Class BasicConnector
     ' Applies a HTTP method on a specific resource.
     ' -------------------------------------------------------------------------
     Public Function Apply(httpMethod, order, options)
-        Handle httpMethod, order, options, "new List<Uri>()"
+        Dim visitedUrl
+        Set visitedUrl = Server.CreateObject("Scripting.Dictionary")
+
+        Handle httpMethod, order, options, visitedUrl
     End Function
 
     ' -------------------------------------------------------------------------
@@ -221,6 +224,11 @@ Class BasicConnector
         ElseIf statusCode = 201 Then    ' Update location.
             order.SetLocation uri
         ElseIf statusCode = 301 Then    ' Update location and redirect if method is GET.
+            order.SetLocation uri
+            If httpMethod = "GET" Then
+                Set HandleResponse = MakeRedirect(order, visitedUrl, uri)
+                Exit Function
+            End If
         ElseIf statusCode = 302 Then    ' Redirect if method is GET.
         ElseIf statusCode = 303 Then    ' Redirect with GET, even if request is POST.
         End If
@@ -235,9 +243,26 @@ Class BasicConnector
         Dim statusCode
         statusCode = response.GetStatus
         If statusCode >= 400 And statusCode <= 599 Then
-            Err.Raise statusCode, "HTTP error code"
+            Err.Raise statusCode, "BasicConnector:VerifyResponse", "HTTP error code"
         End If
     End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Makes a redirect.
+    ' -------------------------------------------------------------------------
+    Private Function MakeRedirect(order, visitedUrl, url)
+        If visitedUrl.Exists(url) Then
+            Err.Raise 5, "BasicConnector:MakeRedirect", "Infinite redirect loop detected."
+        End If
+
+        visitedUrl.Add url, ""
+
+        Dim options
+        Set options = Server.CreateObject("Scripting.Dictionary")
+        options.Add "url", url
+
+        Set MakeRedirect = Handle("GET", order, options, visitedUrl)
+    End Function
 
 End Class
 
