@@ -153,6 +153,7 @@ Class BasicConnectorTest
             Set m_transport.m_request = New HttpRequest
             Set m_transport.m_response = New HttpResponse
             m_transport.m_response.Create errorCode, "", "{""Year"":2012}"
+            m_transport.m_responseCount = 0
 
             Dim options
             Set options = Server.CreateObject("Scripting.Dictionary")
@@ -160,6 +161,7 @@ Class BasicConnectorTest
             Call m_connector.Apply("GET", order, options)
 
             Call testResult.AssertEquals(errorCode, Err.Number, "")
+
             Err.Clear()
         Next
     End Sub
@@ -181,6 +183,7 @@ Class BasicConnectorTest
             Set m_transport.m_request = New HttpRequest
             Set m_transport.m_response = New HttpResponse
             m_transport.m_response.Create errorCode, "", "{""Year"":2012}"
+            m_transport.m_responseCount = 0
 
             Dim data
             Set data = Server.CreateObject("Scripting.Dictionary")
@@ -193,6 +196,7 @@ Class BasicConnectorTest
             Call m_connector.Apply("GET", order, options)
 
             Call testResult.AssertEquals(errorCode, Err.Number, "")
+
             Err.Clear()
         Next
     End Sub

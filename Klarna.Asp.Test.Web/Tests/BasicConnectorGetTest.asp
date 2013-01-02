@@ -106,6 +106,7 @@ Class BasicConnectorGetTest
         Set m_transport.m_request = New HttpRequest
         Set m_transport.m_response = New HttpResponse
         m_transport.m_response.Create 301, "Location:" & m_url, m_responseData
+        Set m_transport.m_response2 = m_transport.m_response
 
         Call m_connector.Apply("GET", order, Null)
 
