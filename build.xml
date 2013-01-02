@@ -1,0 +1,65 @@
+﻿<project name="CHECKOUT-ASP-API" default="tests">
+  <property name="props" location="build.properties" />
+  <property name="versionp" location="version.properties" />
+  <property name="git.tasks.macro" location="ant/git-tasks.xml"/>
+  <property name="tasks" location="ant/tasks.xml"/>
+  <property name="base" location="ant/base.xml"/>
+
+  <property file="${props}" />
+  <property file="${versionp}" />
+  <import file="${tasks}" />
+  <import file="${git.tasks.macro}" />
+  <import file="${base}" />
+
+  <patternset id="source">
+    <include name="Examples/*.asp"/>
+    <include name="Source/*.asp"/>
+  </patternset>
+
+  <target name="dist" depends="clean, increment_build_number">
+
+    <echo message="------------------------------------------------------------"/>
+    <echo message="Copy examples to Examples folder"/>
+    <mkdir dir="Examples"/>
+    <delete includeemptydirs="true">
+      <fileset dir="Examples" includes="**/*"/>
+    </delete>
+    <copy todir="Examples">
+      <fileset dir="Klarna.Asp.Examples" includes="*.asp"/>
+    </copy>
+
+    <echo message="------------------------------------------------------------"/>
+    <echo message="Copy source to Source folder"/>
+    <mkdir dir="Source"/>
+    <delete includeemptydirs="true">
+      <fileset dir="Source" includes="**/*"/>
+    </delete>
+    <copy todir="Source">
+      <fileset dir="Klarna.Asp" includes="*.asp"/>
+    </copy>
+
+    <echo message="------------------------------------------------------------"/>
+    <echo message="Create the build folder"/>
+    <copy todir="${build.dir}">
+      <fileset dir="." id="alldirs">
+        <patternset refid="source" />
+      </fileset>
+    </copy>
+
+    <echo message="------------------------------------------------------------"/>
+    <echo message="Create the zip file"/>
+    <antcall target="package" />
+    
+  </target>
+
+  <target name="tests">
+  </target>
+
+  <target name="unittests">
+    <exec executable="nunit-console">
+      <arg value="-xml=TestResult.xml" />
+      <arg value="Klarna.Asp.Tests/bin/Release/Klarna.Asp.Tests.dll" />
+    </exec>
+  </target>
+
+</project>
