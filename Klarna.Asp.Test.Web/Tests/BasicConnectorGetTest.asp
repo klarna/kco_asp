@@ -72,7 +72,7 @@ Class BasicConnectorGetTest
 
     '--------------------------------------------------------------------------
     ' Tests Apply with GET method and status 200 return.
-    ' But that invalid JSON in response throws an exception.
+    ' But that invalid JSON in response raises an error.
     '--------------------------------------------------------------------------
     Public Sub ApplyGet200InvalidJson(testResult)
         On Error Resume Next
@@ -163,7 +163,7 @@ Class BasicConnectorGetTest
 
     '--------------------------------------------------------------------------
     ' Tests Apply with GET method and status 302 return and redirect to status 503.
-    ' Verifies redirect, that location NOT is updated and that exception is thrown.
+    ' Verifies redirect, that location NOT is updated and that an error is raised.
     '--------------------------------------------------------------------------
     Public Sub ApplyGet302And503(testResult)
         On Error Resume Next
@@ -213,7 +213,7 @@ Class BasicConnectorGetTest
 
     '--------------------------------------------------------------------------
     ' Tests Apply with GET method and status 303 return and redirect to status 503.
-    ' Verifies redirect, that location NOT is updated and that exception is thrown.
+    ' Verifies redirect, that location NOT is updated and that an error is raised.
     '--------------------------------------------------------------------------
     Public Sub ApplyGet303And503(testResult)
         On Error Resume Next
