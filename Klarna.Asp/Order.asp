@@ -65,6 +65,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Sets connector to use.
+    '
+    ' Parameter:
+    ' object    The connector.
     ' -------------------------------------------------------------------------
     Public Sub SetConnector(connector)
         Set m_connector = connector
@@ -72,6 +75,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the base uri that is used to create order resources.
+    '
+    ' Parameter/Returns:
+    ' string    The uri.
     ' -------------------------------------------------------------------------
     Public Function GetBaseUri()
         GetBaseUri = m_baseUri
@@ -83,6 +89,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the uri of the resource.
+    '
+    ' Parameter/Returns:
+    ' string    The uri.
     ' -------------------------------------------------------------------------
     Public Function GetLocation()
         GetLocation = m_location
@@ -94,6 +103,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the content type of the resource.
+    '
+    ' Parameter/Returns:
+    ' string    The content type.
     ' -------------------------------------------------------------------------
     Public Function GetContentType()
         GetContentType = m_contentType
@@ -105,6 +117,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Replace resource with the new data.
+    '
+    ' Parameter:
+    ' string    The data.
     ' -------------------------------------------------------------------------
     Public Function Parse(data)
         Set m_resourceData = JSON.parse(data)
@@ -119,6 +134,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Creates a new order, using the uri in BaseUri.
+    '
+    ' Parameter:
+    ' string    The data.
     ' -------------------------------------------------------------------------
     Public Function Create(data)
         Dim options
@@ -142,6 +160,9 @@ Class Order
 
     ' -------------------------------------------------------------------------
     ' Updates order data.
+    '
+    ' Parameter:
+    ' string    The data.
     ' -------------------------------------------------------------------------
     Public Function Update(data)
         Dim options

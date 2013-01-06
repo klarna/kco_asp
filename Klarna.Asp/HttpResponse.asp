@@ -44,6 +44,11 @@ Class HttpResponse
 
     ' -------------------------------------------------------------------------
     ' Creates the HttpResponse.
+    '
+    ' Parameters:
+    ' int       status          The status code.
+    ' string    headers         The headers.
+    ' string    data            The data.
     ' -------------------------------------------------------------------------
     Public Sub Create(status, headers, data)
         m_status = CInt(status)
@@ -53,6 +58,9 @@ Class HttpResponse
 
     ' -------------------------------------------------------------------------
     ' Gets the HTTP status code.
+    '
+    ' Returns:
+    ' int   The status code.
     ' -------------------------------------------------------------------------
     Public Function GetStatus()
         GetStatus = m_status
@@ -60,6 +68,12 @@ Class HttpResponse
 
     ' -------------------------------------------------------------------------
     ' Gets the headers for the response.
+    '
+    ' Parameter:
+    ' string    name    The header name.
+    '
+    ' Returns:
+    ' string    The header value.
     ' -------------------------------------------------------------------------
 
     Public Function GetHeader(name)
@@ -76,6 +90,9 @@ Class HttpResponse
 
     ' -------------------------------------------------------------------------
     ' Gets the data (payload) for the response.
+    '
+    ' Returns:
+    ' string    The data.
     ' -------------------------------------------------------------------------
     Public Function GetData()
         GetData = m_data
@@ -85,6 +102,9 @@ Class HttpResponse
     ' Parses headers from one string.
     ' Assumes that each header is separated by vbCrLf and name / value pairs
     ' are separated by first occurence of :
+    '
+    ' Parameter:
+    ' string    headerString    The headers.
     '--------------------------------------------------------------------------
     Private Sub ParseHeaders(headerString)
         m_headers.RemoveAll

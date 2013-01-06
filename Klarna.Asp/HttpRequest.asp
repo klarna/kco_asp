@@ -45,6 +45,9 @@ Class HttpRequest
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the request uri.
+    '
+    ' Parameter/Returns:
+    ' string    The request uri.
     ' -------------------------------------------------------------------------
     Public Function GetUri()
         GetUri = m_uri
@@ -56,6 +59,9 @@ Class HttpRequest
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the HTTP method used for the request.
+    '
+    ' Parameter/Returns:
+    ' string    The HTTP method.
     ' -------------------------------------------------------------------------
     Public Function GetMethod()
         GetMethod = m_method
@@ -67,6 +73,13 @@ Class HttpRequest
 
     ' -------------------------------------------------------------------------
     ' Gets or sets headers.
+    '
+    ' Parameter:
+    ' string    name    The header name.
+    ' string    value   The header value.
+    '
+    ' Returns:
+    ' string    The header value.
     ' -------------------------------------------------------------------------
     Public Sub SetHeader(name, value)
         If m_headers.Exists(name) Then
@@ -90,6 +103,9 @@ Class HttpRequest
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the data (payload) for the request.
+    '
+    ' Parameter/Returns:
+    ' string    The data for the request.
     ' -------------------------------------------------------------------------
     Public Function GetData()
         GetData = m_data

@@ -39,6 +39,9 @@ Class HttpTransport
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the number of milliseconds before the connection times out.
+    '
+    ' Parameter/Returns:
+    ' int    The timeout in milliseconds.
     ' -------------------------------------------------------------------------
     Public Function GetTimeout()
         GetTimeout = m_timeout
@@ -50,6 +53,12 @@ Class HttpTransport
 
     ' -------------------------------------------------------------------------
     ' Creates a HttpRequest.
+    '
+    ' Parameters:
+    ' string    uri             The uri.
+    '
+    ' Returns:
+    ' object    The request.
     ' -------------------------------------------------------------------------
     Public Function CreateRequest(uri)
         Dim hr
@@ -61,6 +70,12 @@ Class HttpTransport
 
     ' -------------------------------------------------------------------------
     ' Performs a HTTP request.
+    '
+    ' Parameters:
+    ' object    httpRequest     The request.
+    '
+    ' Returns:
+    ' object    The response.
     ' -------------------------------------------------------------------------
     Public Function Send(httpRequest)
         Dim xmlHttp

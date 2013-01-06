@@ -74,6 +74,9 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the user agent used for User-Agent header.
+    '
+    ' Parameter/Returns:
+    ' object    The user agent.
     ' -------------------------------------------------------------------------
     Public Function GetUserAgent()
         Set GetUserAgent = m_userAgent
@@ -85,6 +88,11 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Applies a HTTP method on a specific resource.
+    '
+    ' Parameters:
+    ' string    httpMethod      The HTTP method, GET or POST.
+    ' object    order           The resource.
+    ' object    options         The options.
     ' -------------------------------------------------------------------------
     Public Function Apply(httpMethod, order, options)
         Dim visitedUrl
@@ -95,6 +103,15 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Handles a HTTP request.
+    '
+    ' Parameters:
+    ' string    httpMethod      The HTTP method, GET or POST.
+    ' object    order           The resource.
+    ' object    options         The options.
+    ' object    visitedUrl      List of visited url.
+    '
+    ' Returns:
+    ' object    The response.
     ' -------------------------------------------------------------------------
     Private Function Handle(httpMethod, order, options, visitedUrl)
         Dim url
@@ -117,6 +134,13 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Gets the url to use, from options or resource.
+    '
+    ' Parameters:
+    ' object    order           The resource.
+    ' object    options         The options.
+    '
+    ' Returns:
+    ' string    The url.
     ' -------------------------------------------------------------------------
     Private Function GetUrl(order, options)
         const URL_KEY = "url"
@@ -141,7 +165,13 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Gets data to use, from options or resource.
-    ' Data is in JSON format.
+    '
+    ' Parameters:
+    ' object    order           The resource.
+    ' object    options         The options.
+    '
+    ' Returns:
+    ' string    The data  in JSON format.
     ' -------------------------------------------------------------------------
     Private Function GetData(order, options)
         const DATA_KEY = "data"
@@ -171,6 +201,15 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Creates a request.
+    '
+    ' Parameters:
+    ' object    order           The resource.
+    ' string    httpMethod      The HTTP method, GET or POST.
+    ' string    payLoad         The payload.
+    ' string    url             The url to use.
+    '
+    ' Returns:
+    ' object    The request.
     ' -------------------------------------------------------------------------
     Private Function CreateRequest(order, httpMethod, payLoad, url)
         ' Create the request with correct method to use
@@ -200,6 +239,15 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Handle response based on status.
+    '
+    ' Parameters:
+    ' object    response        The response to handle.
+    ' string    httpMethod      The HTTP method, GET or POST.
+    ' object    order           The resource.
+    ' object    visitedUrl      List of visited url.
+    '
+    ' Returns:
+    ' object    The response.
     ' -------------------------------------------------------------------------
     Private Function HandleResponse(response, httpMethod, order, visitedUrl)
         VerifyResponse response
@@ -244,6 +292,9 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Method to verify the response.
+    '
+    ' Parameters:
+    ' object    response        The response to verify.
     ' -------------------------------------------------------------------------
     Private Sub VerifyResponse(response)
         Dim statusCode
@@ -255,6 +306,14 @@ Class BasicConnector
 
     ' -------------------------------------------------------------------------
     ' Makes a redirect.
+    '
+    ' Parameters:
+    ' object    order           The resource.
+    ' object    visitedUrl      List of visited url.
+    ' string    url             The url to use.
+    '
+    ' Returns:
+    ' object    The response.
     ' -------------------------------------------------------------------------
     Private Function MakeRedirect(order, visitedUrl, url)
         If visitedUrl.Exists(url) Then

@@ -44,6 +44,12 @@ Class UserAgent
 
     ' -------------------------------------------------------------------------
     ' Adds a field to the field collection.
+    '
+    ' Parameters:
+    ' string    field       The field.
+    ' string    name        The name of the field.
+    ' string    version     The version of the field.
+    ' array     options     An array of field options.
     ' -------------------------------------------------------------------------
     Public Sub AddField(field, name, version, options)
         If m_fields.Exists(field) Then
