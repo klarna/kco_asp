@@ -1,22 +1,27 @@
 ﻿<project name="CHECKOUT-ASP-API" default="tests">
   <property name="props" location="build.properties" />
   <property name="versionp" location="version.properties" />
-  <property name="git.tasks.macro" location="ant/git-tasks.xml"/>
-  <property name="tasks" location="ant/tasks.xml"/>
-  <property name="base" location="ant/base.xml"/>
 
   <property file="${props}" />
   <property file="${versionp}" />
-  <import file="${tasks}" />
-  <import file="${git.tasks.macro}" />
-  <import file="${base}" />
+
+  <property name="zipfile" value="klarna_${product}_${version}.zip" />
 
   <patternset id="source">
     <include name="Examples/*.asp"/>
     <include name="Source/*.asp"/>
   </patternset>
 
-  <target name="dist" depends="clean, increment_build_number">
+  <target name="clean">
+      <delete dir="${build.dir}" />
+  </target>
+
+  <target name="package">
+      <zip basedir="${build.dir}" destfile="${zipfile}" description="zip file" />
+      <checksum file="${zipfile}" forceOverwrite="yes" />
+  </target>
+
+  <target name="dist" depends="clean">
 
     <echo message="------------------------------------------------------------"/>
     <echo message="Copy examples to Examples folder"/>
