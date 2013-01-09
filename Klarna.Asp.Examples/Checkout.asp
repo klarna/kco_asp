@@ -103,7 +103,7 @@ Class Checkout
             End If
         End If
 
-        If order = Nothing Then
+        If order Is Nothing Then
             ' Start a new session
 
             Dim eid
@@ -134,7 +134,7 @@ Class Checkout
         End If
 
         ' Store location of checkout session is session object.
-        Session("klarna_checkout") = order.Location;
+        Session("klarna_checkout") = order.GetLocation
 
         ' Display checkout
         Dim resourceData
