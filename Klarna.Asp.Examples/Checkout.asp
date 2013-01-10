@@ -142,7 +142,7 @@ Class Checkout
         Dim gui
         Set gui = resourceData.gui
         Dim snippet
-        snippet = gui.Item("snippet")
+        snippet = gui.snippet
 
         ' DESKTOP: Width of containing block shall be at least 750px
         ' MOBILE: Width of containing block shall be 100% of browser
