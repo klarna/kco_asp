@@ -84,7 +84,7 @@ Class Create
         merchant.Add "checkout_uri", "https://example.com/checkout.asp"
         merchant.Add "confirmation_uri", _
             "https://example.com/thankyou.asp?sid=123&klarna_order={checkout.order.uri}"
-        ' You cannot recieve push notification on a non publicly available uri.
+        ' You cannot receive push notification on a non publicly available uri.
         merchant.Add "push_uri", _
             "https://example.com/push.asp?sid=123&klarna_order={checkout.order.uri}"
 

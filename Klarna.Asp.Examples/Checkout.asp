@@ -116,7 +116,7 @@ Class Checkout
             merchant.Add "terms_uri", "http://localhost/terms.html"
             merchant.Add "checkout_uri", "http://localhost/checkout.asp"
             merchant.Add "confirmation_uri", "http://localhost/confirmation.asp"
-            ' You cannot recieve push notification on a non publicly available uri.
+            ' You cannot receive push notification on a non publicly available uri.
             merchant.Add "push_uri", "http://localhost/push.asp"
 
             data.RemoveAll()
