@@ -38,7 +38,10 @@
   <ItemGroup>
     <Content Include="Checkout.asp" />
     <Content Include="Confirmation.asp" />
+    <Content Include="Create.asp" />
+    <Content Include="Fetch.asp" />
     <Content Include="Push.asp" />
+    <Content Include="Update.asp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

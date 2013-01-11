@@ -104,7 +104,7 @@ Class Checkout
             End If
         End If
 
-        If order = Nothing Then
+        If order Is Nothing Then
             ' Start a new session
 
             Dim eid
@@ -135,7 +135,7 @@ Class Checkout
         End If
 
         ' Store location of checkout session is session object.
-        Session("klarna_checkout") = order.Location;
+        Session("klarna_checkout") = order.GetLocation
 
         ' Display checkout
         Dim resourceData
@@ -143,7 +143,7 @@ Class Checkout
         Dim gui
         Set gui = resourceData.gui
         Dim snippet
-        snippet = gui.Item("snippet")
+        snippet = gui.snippet
 
         ' DESKTOP: Width of containing block shall be at least 750px
         ' MOBILE: Width of containing block shall be 100% of browser
