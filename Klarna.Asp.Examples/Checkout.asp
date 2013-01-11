@@ -38,21 +38,21 @@ Class Checkout
         ' Cart
         Dim item1
         Set item1 = Server.CreateObject("Scripting.Dictionary")
-        item1.Add "quantity", 1
-        item1.Add "reference", "BANAN01"
-        item1.Add "name", "Bananana"
-        item1.Add "unit_price", 450
-        item1.Add "discount_rate", 0
+        item1.Add "reference", "123456789"
+        item1.Add "name", "Klarna t-shirt"
+        item1.Add "quantity", 2
+        item1.Add "unit_price", 12300
+        item1.Add "discount_rate", 1000
         item1.Add "tax_rate", 2500
 
         Dim item2
         Set item2 = Server.CreateObject("Scripting.Dictionary")
-        item2.Add "quantity", 1
         item2.Add "type", "shipping_fee"
         item2.Add "reference", "SHIPPING"
         item2.Add "name", "Shipping Fee"
-        item2.Add "unit_price", 450
-        item2.Add "discount_rate", 0
+        item2.Add "quantity", 1
+        item2.Add "unit_price", 4900
+        item2.Add "discount_rate", 2500
         item2.Add "tax_rate", 2500
 
         Dim cartItems(1)
@@ -108,7 +108,7 @@ Class Checkout
             ' Start a new session
 
             Dim eid
-            eid = "2"
+            eid = "0"
 
             Dim merchant
             Set merchant = Server.CreateObject("Scripting.Dictionary")

@@ -1,5 +1,30 @@
 <%
 '------------------------------------------------------------------------------
+'   Copyright 2013 Klarna AB
+'   Licensed under the Apache License, Version 2.0 (the "License");
+'   you may not use this file except in compliance with the License.
+'   You may obtain a copy of the License at
+'       http://www.apache.org/licenses/LICENSE-2.0
+'   Unless required by applicable law or agreed to in writing, software
+'   distributed under the License is distributed on an "AS IS" BASIS,
+'   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+'   See the License for the specific language governing permissions and
+'   limitations under the License.
+'
+'   Klarna Support: support@klarna.com
+'   http://integration.klarna.com/
+'------------------------------------------------------------------------------
+'[[examples-update]]
+%>
+<!-- #include file="../Klarna.Asp/Order.asp" -->
+<!-- #include file="../Klarna.Asp/Digest.asp" -->
+<!-- #include file="../Klarna.Asp/UserAgent.asp" -->
+<!-- #include file="../Klarna.Asp/BasicConnector.asp" -->
+<!-- #include file="../Klarna.Asp/HttpRequest.asp" -->
+<!-- #include file="../Klarna.Asp/HttpResponse.asp" -->
+<!-- #include file="../Klarna.Asp/HttpTransport.asp" -->
+<%
+'------------------------------------------------------------------------------
 ' The update checkout example.
 '------------------------------------------------------------------------------
 Class Update
@@ -67,4 +92,5 @@ Class Update
     End Sub
 
 End Class
+'[[examples-update]]
  %>
