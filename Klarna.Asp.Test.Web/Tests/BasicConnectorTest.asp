@@ -120,7 +120,7 @@ Class BasicConnectorTest
         Set m_transport.m_request = New HttpRequest
         Set m_transport.m_response = New HttpResponse
         Dim jsonData
-        jsonData = "{""Year"":2012}"
+        jsonData = "{""Year"": 2012}"
         m_transport.m_response.Create 200, "", jsonData
 
         Dim data

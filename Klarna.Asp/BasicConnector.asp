@@ -1,7 +1,4 @@
-﻿<!-- #include file="jsonencode.asp" -->
-<!-- #include file="json2.asp" -->
-
-<%
+﻿<%
 '------------------------------------------------------------------------------
 '   Copyright 2012 Klarna AB
 '   Licensed under the Apache License, Version 2.0 (the "License");
@@ -190,11 +187,11 @@ Class BasicConnector
             Dim dictionaryData
             Set dictionaryData = options.Item(DATA_KEY)
 
-            data = JSONEncodeDict("", dictionaryData)
+            Dim jx
+            Set jx = new JSONX
+            data = jx.toJSON(Empty, dictionaryData, true)
         Else
-            Dim marshalData
-            Set marshalData = order.Marshal
-            data = JSON.stringify(marshalData)
+            data = order.MarshalAsJson
         End If
 
         GetData = data

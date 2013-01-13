@@ -7,6 +7,7 @@ Response.Charset = "UTF-8"
 <!-- #include virtual="/ASPUnit/include/ASPUnitRunner.asp" -->
 <!-- #include file="../MockConnector.asp" -->
 <!-- #include file="../MockHttpTransport.asp" -->
+<!-- #include file="../../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../../Klarna.Asp/Order.asp" -->
 <!-- #include file="../../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../../Klarna.Asp/UserAgent.asp" -->

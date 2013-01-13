@@ -1,5 +1,3 @@
-<!-- #include file="../../Klarna.Asp/jsonencode.asp" -->
-
 <%
 '------------------------------------------------------------------------------
 ' Tests the Digest class.
@@ -38,8 +36,10 @@ Class DigestTest
         data.Add "country", "SWE"
         data.Add "language", "SV"
 
+        Dim jx
+        Set jx = new JSONX
         Dim json
-        json = JSONEncodeDict("", data)
+        json = jx.toJSON(Empty, data, true)
 
         Dim digest
         Set digest = New Digest
@@ -47,7 +47,7 @@ Class DigestTest
         actual = digest.Create(json & "mySecret")
         
         Dim expected
-        expected = "MO/6KvzsY2y+F+/SexH7Hyg16gFpsPDx5A2PtLZd0Zs="
+        expected = "ZBFwp1xSpqk/VntS+ada3b/UGTii+C5K3+41YZBS07g="
         
         Call testResult.AssertEquals(expected, actual, "The digest string")
     End Sub
