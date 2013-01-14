@@ -5,11 +5,15 @@
   <property file="${props}" />
   <property file="${versionp}" />
 
+  <property name="version" value="${build.version.major}.${build.version.minor}.${build.version.bug}" />
+
   <property name="zipfile" value="klarna_${product}_${version}.zip" />
 
   <patternset id="source">
-    <include name="Examples/*.asp"/>
-    <include name="Source/*.asp"/>
+    <include name="Examples/*.asp" />
+    <include name="Source/*.asp" />
+    <include name="README.md" />
+    <include name="CHANGELOG" />
   </patternset>
 
   <target name="clean">
@@ -54,7 +58,7 @@
     <echo message="------------------------------------------------------------"/>
     <echo message="Create the zip file"/>
     <antcall target="package" />
-    
+
   </target>
 
   <target name="tests">
