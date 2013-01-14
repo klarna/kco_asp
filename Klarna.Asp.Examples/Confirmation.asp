@@ -16,6 +16,7 @@
 '------------------------------------------------------------------------------
 '[[examples-confirmation]]
 %>
+<!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
 <!-- #include file="../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../Klarna.Asp/UserAgent.asp" -->

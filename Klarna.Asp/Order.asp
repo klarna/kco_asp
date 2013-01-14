@@ -133,6 +133,13 @@ Class Order
     End Function
 
     ' -------------------------------------------------------------------------
+    ' Basic representation of the resource, in JSON format.
+    ' -------------------------------------------------------------------------
+    Public Function MarshalAsJson()
+        MarshalAsJson = JSON.stringify(m_resourceData)
+    End Function
+
+    ' -------------------------------------------------------------------------
     ' Creates a new order, using the uri in BaseUri.
     '
     ' Parameter:
