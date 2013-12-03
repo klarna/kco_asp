@@ -128,7 +128,7 @@ Class Checkout
             data.Add "cart", cart
 
             Set order = CreateOrder(connector)
-            order.SetBaseUri "https://klarnacheckout.apiary.io/checkout/orders"
+            order.SetBaseUri "https://checkout.testdrive.klarna.com/checkout/orders"
             order.SetContentType contentType
 
             order.Create data
