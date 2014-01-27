@@ -34,6 +34,7 @@ Class HttpResponse
     ' -------------------------------------------------------------------------
     Private Sub Class_Initialize
         Set m_headers = Server.CreateObject("Scripting.Dictionary")
+        m_headers.CompareMode = 1
         m_status = 0
         m_data = ""
     End Sub
