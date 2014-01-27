@@ -57,6 +57,28 @@ Class HttpResponseTest
         Call testResult.AssertEquals(data, hr.GetData, "The data")
     End Sub
 
+    '--------------------------------------------------------------------------
+    ' Tests case insensitive headers.
+    '--------------------------------------------------------------------------
+    Public Sub CaseInsensitiveHeaders(testResult)
+        Dim status
+        status = 200
+
+        Dim headers
+        Set headers = "Content-Type:application/json" & vbCrLf & _
+                  "Accept-Charset:utf-8"  & vbCrLf & _
+                  "Server: Microsoft-IIS/8.0" & vbCrLf & _
+                  "Location: http://uri/1" & vbCrLf & ":"
+
+        Dim data
+        data = "{""Brand"":""Volvo""}"
+
+        hr.Create status, headers, data
+
+        Call testResult.AssertEquals("http://uri/1", hr.GetHeader("LOCATION"), "Uppercase")
+        Call testResult.AssertEquals("http://uri/1", hr.GetHeader("location"), "Lowercase")
+    End Sub
+
 End Class
 
 %>
