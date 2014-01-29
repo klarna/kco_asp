@@ -34,7 +34,7 @@ Class UserAgent
     Private Sub Class_Initialize
         Set m_fields = Server.CreateObject("Scripting.Dictionary")
 
-        AddField "Library", "Klarna.ApiWrapper", "1.0", Null
+        AddField "Library", "Klarna.ApiWrapper", "1.0.1", Null
         AddField "Language", "ASP", "Classic", Null
     End Sub
 
