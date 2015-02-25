@@ -21,16 +21,16 @@ Class HttpTransportTest
     ' Tests default creation.
     '--------------------------------------------------------------------------
     Public Sub Creation(testResult)
-        Call testResult.AssertEquals(5000, transport.GetTimeout, "The timeout")
+        Call testResult.AssertEquals(10000, transport.GetTimeout, "The timeout")
     End Sub
 
     '--------------------------------------------------------------------------
     ' Tests Timeout setter and getter.
     '--------------------------------------------------------------------------
     Public Sub Timeout(testResult)
-        Call testResult.AssertEquals(5000, transport.GetTimeout, "")
-        transport.SetTimeout 10000
         Call testResult.AssertEquals(10000, transport.GetTimeout, "")
+        transport.SetTimeout 15000
+        Call testResult.AssertEquals(15000, transport.GetTimeout, "")
     End Sub
 
     '--------------------------------------------------------------------------

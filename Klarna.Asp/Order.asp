@@ -14,7 +14,7 @@
 '   limitations under the License.
 '
 '   Klarna Support: support@klarna.com
-'   http://integration.klarna.com/
+'   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 
 '--------------------------------------------------------------------------

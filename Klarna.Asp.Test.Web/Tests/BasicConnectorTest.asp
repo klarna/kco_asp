@@ -38,14 +38,14 @@ Class BasicConnectorTest
         Dim ua
         Set ua = m_connector.GetUserAgent
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_1.0 Language/ASP_Classic", ua.ToString, "")
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_1.0.2 Language/ASP_Classic", ua.ToString, "")
 
         ua.AddField "JS Lib", "jQuery", "1.8.2", Null
 
         Dim ua2
         Set ua2 = m_connector.GetUserAgent
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_1.0 Language/ASP_Classic JS Lib/jQuery_1.8.2", ua2.ToString, "")
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_1.0.2 Language/ASP_Classic JS Lib/jQuery_1.8.2", ua2.ToString, "")
     End Sub
 
     '--------------------------------------------------------------------------
@@ -79,7 +79,7 @@ Class BasicConnectorTest
         Dim options
         Set options = Server.CreateObject("Scripting.Dictionary")
         options.Add "url", m_url
-        
+
         Call m_connector.Apply("GET", order, options)
 
         Call testResult.AssertEquals("http://klarna.com", m_transport.m_request.GetUri, "")
@@ -100,7 +100,7 @@ Class BasicConnectorTest
         m_transport.m_response.Create 200, "", jsonData
 
         order.Parse jsonData
-        
+
         Dim options
         Set options = Server.CreateObject("Scripting.Dictionary")
 
@@ -126,7 +126,7 @@ Class BasicConnectorTest
         Dim data
         Set data = Server.CreateObject("Scripting.Dictionary")
         data.Add "Year", 2012
-        
+
         Dim options
         Set options = Server.CreateObject("Scripting.Dictionary")
         options.Add "data", data
@@ -188,7 +188,7 @@ Class BasicConnectorTest
             Dim data
             Set data = Server.CreateObject("Scripting.Dictionary")
             data.Add "Year", 2012
-        
+
             Dim options
             Set options = Server.CreateObject("Scripting.Dictionary")
             options.Add "data", data

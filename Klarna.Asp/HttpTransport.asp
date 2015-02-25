@@ -12,7 +12,7 @@
 '   limitations under the License.
 '
 '   Klarna Support: support@klarna.com
-'   http://integration.klarna.com/
+'   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 
 '------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ Class HttpTransport
     ' Initializes a new instance of the HttpTransport class.
     ' -------------------------------------------------------------------------
     Private Sub Class_Initialize
-        m_timeout = 5000
+        m_timeout = 10000
     End Sub
 
     Private Sub Class_Terminate
