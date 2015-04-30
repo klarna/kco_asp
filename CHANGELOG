@@ -2,6 +2,20 @@
 Klarna Checkout ASP library
 ===========================
 
+v1.0.2
+----------------
+Date: 2015-02-25
+
+    Majid G. <support@klarna.com>
+        Increase default timeout from 5 to 10
+
+v1.0.1
+----------------
+Date: 2014-01-31
+
+    Christer G. <support@klarna.com>
+        Use case insensitive dictionary for response headers.
+
 v1.0.0
 ----------------
 Date: 2013-01-09
