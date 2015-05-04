@@ -1,10 +1,15 @@
-﻿<%
+﻿<%@ LANGUAGE="VBSCRIPT" %>
+<% Option Explicit %>
+<%
 '------------------------------------------------------------------------------
-'   Copyright 2013 Klarna AB
+'   Copyright 2015 Klarna AB
+'
 '   Licensed under the Apache License, Version 2.0 (the "License");
 '   you may not use this file except in compliance with the License.
 '   You may obtain a copy of the License at
+'
 '       http://www.apache.org/licenses/LICENSE-2.0
+'
 '   Unless required by applicable law or agreed to in writing, software
 '   distributed under the License is distributed on an "AS IS" BASIS,
 '   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +19,8 @@
 '   Klarna Support: support@klarna.com
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
-'[[examples-push]]
 %>
+<!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
 <!-- #include file="../Klarna.Asp/Digest.asp" -->
@@ -36,26 +41,20 @@ Class Push
     Public Sub Example()
         On Error Resume Next
 
-        ' Create connector
-        Dim transport
-        Set transport = new HttpTransport
-        Dim digest
-        Set digest = New Digest
         Dim sharedSecret
         sharedSecret = "sharedSecret"
+
+        ' Create connector
         Dim connector
-        Set connector = CreateBasicConnector(transport, digest, sharedSecret)
+        Set connector = CreateConnector(sharedSecret)
 
         ' Retrieve location from query string.
         ' Use following in ASP.
         Dim checkoutId
         checkoutId = Request.QueryString("checkout_uri")
-        Dim contentType
-        contentType = "application/vnd.klarna.checkout.aggregated-order-v2+json"
         Dim order
         Set order = CreateOrder(connector)
         order.SetLocation checkoutId
-        order.SetContentType contentType
 
         order.Fetch
 
@@ -80,9 +79,27 @@ Class Push
             order.Update data
         End If
 
-        Err.Clear()
+        If order.HasError = True Then
+            Response.Write("Message: " & order.GetError().Marshal().internal_message & "<br/>")
+        End If
+
+        If Err.Number <> 0 Then
+            Response.Write("An error occurred: " & Err.Description)
+            Err.Clear
+
+            ' Error occurred, stop execution
+            Exit Sub
+        End If
+
+        Set resourceData = order.Marshal()
+        Response.Write(resourceData.status)
+
     End Sub
 
 End Class
-'[[examples-push]]
+
+Dim example
+Set example = New Push
+Call example.Example()
+
 %>

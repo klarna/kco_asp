@@ -1,10 +1,15 @@
+<%@ LANGUAGE="VBSCRIPT" %>
+<% Option Explicit %>
 <%
 '------------------------------------------------------------------------------
-'   Copyright 2013 Klarna AB
+'   Copyright 2015 Klarna AB
+'
 '   Licensed under the Apache License, Version 2.0 (the "License");
 '   you may not use this file except in compliance with the License.
 '   You may obtain a copy of the License at
+'
 '       http://www.apache.org/licenses/LICENSE-2.0
+'
 '   Unless required by applicable law or agreed to in writing, software
 '   distributed under the License is distributed on an "AS IS" BASIS,
 '   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +19,8 @@
 '   Klarna Support: support@klarna.com
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
-'[[examples-fetch]]
 %>
+<!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
 <!-- #include file="../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../Klarna.Asp/UserAgent.asp" -->
@@ -33,29 +38,45 @@ Class Fetch
     ' The example.
     '--------------------------------------------------------------------------
     Public Sub Example()
-        ' Create connector
-        Dim transport
-        Set transport = new HttpTransport
-        Dim digest
-        Set digest = New Digest
+        On Error Resume Next
+
         Dim sharedSecret
         sharedSecret = "sharedSecret"
+
+        ' Create connector
         Dim connector
-        Set connector = CreateBasicConnector(transport, digest, sharedSecret)
+        Set connector = CreateConnector(sharedSecret)
 
         Dim resourceUri
         resourceUri = "https://checkout.testdrive.klarna.com/checkout/orders/ABC123"
 
-        Dim contentType
-        contentType = "application/vnd.klarna.checkout.aggregated-order-v2+json"
         Dim order
         Set order = CreateOrder(connector)
         order.SetLocation resourceUri
-        order.SetContentType contentType
 
         order.Fetch
+
+        If order.HasError = True Then
+            Response.Write("Message: " & order.GetError().Marshal().internal_message & "<br/>")
+        End If
+
+        If Err.Number <> 0 Then
+            Response.Write("An error occurred: " & Err.Description)
+            Err.Clear
+
+            ' Error occurred, stop execution
+            Exit Sub
+        End If
+
+        Dim resourceData
+        Set resourceData = order.Marshal()
+
     End Sub
 
 End Class
-'[[examples-fetch]]
+
+Dim example
+Set example = New Fetch
+Call example.Example()
+
 %>

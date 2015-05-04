@@ -36,6 +36,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="ApiError.asp" />
     <Content Include="HttpResponse.asp" />
     <Content Include="Crypto.asp" />
     <Content Include="Digest.asp" />
@@ -45,7 +46,12 @@
     <Content Include="Order.asp" />
     <Content Include="HttpRequest.asp" />
     <Content Include="HttpTransport.asp" />
+    <Content Include="RecurringOrder.asp" />
+    <Content Include="RecurringStatus.asp" />
     <Content Include="UserAgent.asp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

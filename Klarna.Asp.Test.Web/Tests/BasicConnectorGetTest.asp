@@ -10,6 +10,7 @@ Class BasicConnectorGetTest
     Private m_url
     Private m_contentType
     Private m_responseData
+    Private m_accept
 
     Public Function TestCaseNames()
         TestCaseNames = Array("ApplyGet200", "ApplyGet200InvalidJson", _
@@ -24,6 +25,7 @@ Class BasicConnectorGetTest
         Set m_connector = CreateBasicConnector(m_transport, m_digest, m_secret)
         m_url = "http://klarna.com"
         m_contentType = "application/vnd.klarna.checkout.aggregated-order-v2+json"
+        m_accept = "application/vnd.klarna-custom+json"
         m_responseData = "{""Year"":2012}"
     End Sub
 
@@ -40,6 +42,7 @@ Class BasicConnectorGetTest
         Set order = New Order
         order.SetLocation m_url
         order.SetContentType m_contentType
+        order.SetAccept m_accept
 
         Set m_transport.m_request = New HttpRequest
         Set m_transport.m_response = New HttpResponse
@@ -48,18 +51,18 @@ Class BasicConnectorGetTest
         Call m_connector.Apply("GET", order, Null)
 
         Call testResult.AssertEquals("GET", m_transport.m_requestInSend.GetMethod(), "")
-        
+
         Call testResult.AssertEquals(m_connector.GetUserAgent().ToString(), _
             m_transport.m_requestInSend.GetHeader("User-Agent"), "")
-        
+
         Dim digestString
         digestString = m_digest.Create("" & m_secret)
         Dim authorization
         authorization = "Klarna " & digestString
         Call testResult.AssertEquals(authorization, _
             m_transport.m_requestInSend.GetHeader("Authorization"), "")
-        
-        Call testResult.AssertEquals(m_contentType, _
+
+        Call testResult.AssertEquals(m_accept, _
             m_transport.m_requestInSend.GetHeader("Accept"), "")
 
         Call testResult.AssertEquals("", _
@@ -137,17 +140,17 @@ Class BasicConnectorGetTest
         Call m_connector.Apply("GET", order, Null)
 
         Call testResult.AssertEquals("GET", m_transport.m_requestInSend.GetMethod(), "")
-        
+
         Call testResult.AssertEquals(m_connector.GetUserAgent().ToString(), _
             m_transport.m_requestInSend.GetHeader("User-Agent"), "")
-        
+
         Dim digestString
         digestString = m_digest.Create("" & m_secret)
         Dim authorization
         authorization = "Klarna " & digestString
         Call testResult.AssertEquals(authorization, _
             m_transport.m_requestInSend.GetHeader("Authorization"), "")
-        
+
         Call testResult.AssertEquals(m_contentType, _
             m_transport.m_requestInSend.GetHeader("Accept"), "")
 
@@ -185,17 +188,17 @@ Class BasicConnectorGetTest
         Call m_connector.Apply("GET", order, Null)
 
         Call testResult.AssertEquals("GET", m_transport.m_requestInSend.GetMethod(), "")
-        
+
         Call testResult.AssertEquals(m_connector.GetUserAgent().ToString(), _
             m_transport.m_requestInSend.GetHeader("User-Agent"), "")
-        
+
         Dim digestString
         digestString = m_digest.Create("" & m_secret)
         Dim authorization
         authorization = "Klarna " & digestString
         Call testResult.AssertEquals(authorization, _
             m_transport.m_requestInSend.GetHeader("Authorization"), "")
-        
+
         Call testResult.AssertEquals(m_contentType, _
             m_transport.m_requestInSend.GetHeader("Accept"), "")
 
@@ -235,17 +238,17 @@ Class BasicConnectorGetTest
         Call m_connector.Apply("GET", order, Null)
 
         Call testResult.AssertEquals("GET", m_transport.m_requestInSend.GetMethod(), "")
-        
+
         Call testResult.AssertEquals(m_connector.GetUserAgent().ToString(), _
             m_transport.m_requestInSend.GetHeader("User-Agent"), "")
-        
+
         Dim digestString
         digestString = m_digest.Create("" & m_secret)
         Dim authorization
         authorization = "Klarna " & digestString
         Call testResult.AssertEquals(authorization, _
             m_transport.m_requestInSend.GetHeader("Authorization"), "")
-        
+
         Call testResult.AssertEquals(m_contentType, _
             m_transport.m_requestInSend.GetHeader("Accept"), "")
 

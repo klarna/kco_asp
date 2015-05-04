@@ -1,0 +1,12 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.cs text diff=csharp
+*.asp text
+
+# Custom for Visual Studio
+*.sln text eol=crlf merge=union
+*.csproj text eol=crlf merge=union
+*.vbproj text eol=crlf merge=union

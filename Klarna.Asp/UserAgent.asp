@@ -1,10 +1,13 @@
 ﻿<%
 '------------------------------------------------------------------------------
-'   Copyright 2013 Klarna AB
+'   Copyright 2015 Klarna AB
+'
 '   Licensed under the Apache License, Version 2.0 (the "License");
 '   you may not use this file except in compliance with the License.
 '   You may obtain a copy of the License at
+'
 '       http://www.apache.org/licenses/LICENSE-2.0
+'
 '   Unless required by applicable law or agreed to in writing, software
 '   distributed under the License is distributed on an "AS IS" BASIS,
 '   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +37,7 @@ Class UserAgent
     Private Sub Class_Initialize
         Set m_fields = Server.CreateObject("Scripting.Dictionary")
 
-        AddField "Library", "Klarna.ApiWrapper", "1.0.2", Null
+        AddField "Library", "Klarna.ApiWrapper", "2.0.0", Null
         AddField "Language", "ASP", "Classic", Null
     End Sub
 

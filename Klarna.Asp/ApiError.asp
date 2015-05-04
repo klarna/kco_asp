@@ -1,4 +1,6 @@
-﻿<%
+﻿<!-- #include file="json2.asp" -->
+
+<%
 '------------------------------------------------------------------------------
 '   Copyright 2015 Klarna AB
 '
@@ -18,104 +20,98 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 
-'------------------------------------------------------------------------------
-' The HTTP request.
-'------------------------------------------------------------------------------
+'--------------------------------------------------------------------------
+' Creates a new instance of the ApiError class.
+'
+' Parameters:
+' object    response     The HttpResponse object.
+'
+' Returns:
+' The ApiError instance
+'--------------------------------------------------------------------------
+Public Function CreateApiError(response)
+    Dim apiErr, data
 
-Class HttpRequest
+    On Error Resume Next
+
+    Set apiErr = new ApiError
+
+    apiErr.SetResponse(response)
+
+    data = response.GetData()
+
+    If Len(data) > 0 Then
+        apiErr.Parse(data)
+    End If
+
+    If Err.Number <> 0 Then
+        ' Error occurred during parsing of the error response, ignore it.
+
+        Err.Clear
+    End If
+
+    Set CreateApiError = apiErr
+End Function
+
+'------------------------------------------------------------------------------
+' The API error resource.
+'------------------------------------------------------------------------------
+Class ApiError
     ' -------------------------------------------------------------------------
     ' Private members
     ' -------------------------------------------------------------------------
-    Private m_headers
-    Private m_uri
-    Private m_method
-    Private m_data
+    Private m_resourceData
+    Private m_response
 
     ' -------------------------------------------------------------------------
     ' Class constructor
-    '
-    ' Initializes a new instance of the Request class.
     ' -------------------------------------------------------------------------
     Private Sub Class_Initialize
-        Set m_headers = Server.CreateObject("Scripting.Dictionary")
-        m_method = "GET"
-        m_data = ""
+        Set m_resourceData = Nothing
+        Set m_response = Nothing
     End Sub
 
     Private Sub Class_Terminate
-        Set m_headers = Nothing
+        Set m_resourceData = Nothing
+        Set m_response = Nothing
     End Sub
 
     ' -------------------------------------------------------------------------
-    ' Gets or sets the request uri.
+    ' Gets or sets the underlying HTTP response object for this error.
     '
     ' Parameter/Returns:
-    ' string    The request uri.
+    ' object    The HttpResponse object.
     ' -------------------------------------------------------------------------
-    Public Function GetUri()
-        GetUri = m_uri
+    Public Function GetResponse()
+        Set GetResponse = m_response
     End Function
 
-    Public Function SetUri(uri)
-        m_uri = uri
-    End Function
-
-    ' -------------------------------------------------------------------------
-    ' Gets or sets the HTTP method used for the request.
-    '
-    ' Parameter/Returns:
-    ' string    The HTTP method.
-    ' -------------------------------------------------------------------------
-    Public Function GetMethod()
-        GetMethod = m_method
-    End Function
-
-    Public Function SetMethod(method)
-        m_method = UCase(method)
+    Public Function SetResponse(response)
+        Set m_response = response
     End Function
 
     ' -------------------------------------------------------------------------
-    ' Gets or sets headers.
+    ' Replace resource with the new data.
     '
     ' Parameter:
-    ' string    name    The header name.
-    ' string    value   The header value.
-    '
-    ' Returns:
-    ' string    The header value.
+    ' string    The data.
     ' -------------------------------------------------------------------------
-    Public Sub SetHeader(name, value)
-        If m_headers.Exists(name) Then
-            m_headers.Item(name) = value
-        Else
-            m_headers.Add name, value
-        End If
-    End Sub
-
-    Public Function GetHeader(name)
-        If m_headers.Exists(name) Then
-            GetHeader = m_headers.Item(name)
-        Else
-            GetHeader = ""
-        End If
-    End Function
-
-    Public Function GetHeaders()
-        Set GetHeaders = m_headers
+    Public Function Parse(data)
+        Set m_resourceData = JSON.parse(data)
     End Function
 
     ' -------------------------------------------------------------------------
-    ' Gets or sets the data (payload) for the request.
-    '
-    ' Parameter/Returns:
-    ' string    The data for the request.
+    ' Basic representation of the resource.
     ' -------------------------------------------------------------------------
-    Public Function GetData()
-        GetData = m_data
+    Public Function Marshal()
+        Set Marshal = m_resourceData
     End Function
 
-    Public Function SetData(data)
-        m_data = data
+    ' -------------------------------------------------------------------------
+    ' Basic representation of the resource, in JSON format.
+    ' -------------------------------------------------------------------------
+    Public Function MarshalAsJson()
+        MarshalAsJson = JSON.stringify(m_resourceData)
     End Function
 
 End Class

@@ -1,22 +1,34 @@
 ﻿namespace Klarna.Asp.Tests
 {
+    using NUnit.Framework;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Threading;
 
     // based on http://www.reimers.dk/jacob-reimers-blog/testing-your-web-application-with-iis-express-and-unit-tests
+    [SetUpFixture]
     public class IisExpressServer : IDisposable
     {
-        private readonly string siteName;
+        private readonly string path;
+        private readonly int port;
         private string execPath;
         private Process iisProcess;
         private Thread thread;
 
-        // siteName is the name of the configured web site to start in IIS Express
-        public IisExpressServer(string siteName)
+        public IisExpressServer()
         {
-            this.siteName = siteName;
+            string cwd = Directory.GetCurrentDirectory();
+            DirectoryInfo dir = Directory.GetParent(cwd).Parent.Parent;
+            this.path = dir.FullName + "\\Klarna.Asp.Test.Web";
+            this.port = 54979;
+        }
+
+        // siteName is the name of the configured web site to start in IIS Express
+        public IisExpressServer(string path)
+        {
+            this.path = path;
+            this.port = 54979;
         }
 
         // set path to IIS Express .exe
@@ -26,6 +38,7 @@
             return this;
         }
 
+        [SetUp]
         public void Start()
         {
             thread = new Thread(StartServer)
@@ -35,14 +48,18 @@
             thread.Start();
         }
 
+        [TearDown]
         public void Stop()
         {
             if (iisProcess == null)
                 return;
             if (!iisProcess.HasExited)
                 iisProcess.CloseMainWindow();
+            iisProcess.Kill();
+            iisProcess.Close();
             iisProcess.Dispose();
             iisProcess = null;
+            thread.Abort();
             thread = null;
         }
 
@@ -54,12 +71,27 @@
         private void StartServer()
         {
             var fileName = GetIisExpressExecPath();
-            var arguments = string.Format("/site:{0}", siteName);
+            var arguments = string.Format("/path:\"{0}\" /port:{1} /systray:false", path, port);
+
+            Debug.Write(fileName + " ");
+            Debug.WriteLine(arguments);
 
             try
             {
-                iisProcess = Process.Start(fileName, arguments);
-                iisProcess.WaitForExit();
+                iisProcess = new Process();
+                iisProcess.StartInfo.UseShellExecute = false;
+                iisProcess.StartInfo.RedirectStandardOutput = true;
+                iisProcess.StartInfo.RedirectStandardError = true;
+                iisProcess.StartInfo.FileName = fileName;
+                iisProcess.StartInfo.Arguments = arguments;
+
+                iisProcess.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
+                iisProcess.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+
+                iisProcess.Start();
+
+                iisProcess.BeginOutputReadLine();
+                iisProcess.BeginErrorReadLine();
             }
             catch
             {
@@ -84,6 +116,16 @@
             if (string.IsNullOrEmpty(programFiles))
                 return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             return programFiles;
+        }
+
+        private static void OutputHandler(
+            Object sender,
+            DataReceivedEventArgs e
+        ) {
+            if (!String.IsNullOrEmpty(e.Data))
+            {
+                Debug.WriteLine(e.Data);
+            }
         }
     }
 }

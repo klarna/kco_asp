@@ -45,10 +45,10 @@ Class DigestTest
         Set digest = New Digest
         Dim actual
         actual = digest.Create(json & "mySecret")
-        
+
         Dim expected
         expected = "ZBFwp1xSpqk/VntS+ada3b/UGTii+C5K3+41YZBS07g="
-        
+
         Call testResult.AssertEquals(expected, actual, "The digest string")
     End Sub
 

@@ -2,12 +2,20 @@
 Klarna Checkout ASP library
 ===========================
 
+v2.0.0
+----------------
+Date: 2015-05-20
+
+    Joakim L. <support@klarna.com>
+        Add support for KCO recurring orders.
+        Improve error handling.
+
 v1.0.2
 ----------------
 Date: 2015-02-25
 
     Majid G. <support@klarna.com>
-        Increase default timeout from 5 to 10
+        Increase default timeout from 5 to 10.
 
 v1.0.1
 ----------------
