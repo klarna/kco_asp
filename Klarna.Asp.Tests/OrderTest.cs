@@ -21,64 +21,21 @@
 #endregion
 namespace Klarna.Asp.Tests
 {
-    using System.Text;
-
-    using AspUnitRunner;
-
     using NUnit.Framework;
 
     /// <summary>
     /// Tests the ASP Order class.
     /// </summary>
     [TestFixture]
-    public class OrderTest
+    public class OrderTest : TestCase
     {
-        #region Private Fields
-
-        // set the URL for your ASPUnit tests
-        private const string AspTestUrl = "http://localhost:54979/Tests/Default.asp";
-
-        // set the site name as configured in IIS Express
-        // (defaults to name of sample web project: AspUnitRunner.Sample.Web)
-        private const string AspSiteName = "Klarna.Asp.Tests.Web";
-
-        private IisExpressServer iisServer;
-
-        #endregion
-
-        #region SetUp and TearDown
-
-        [TestFixtureSetUp]
-        public void StartServer()
-        {
-            iisServer = new IisExpressServer(AspSiteName);
-            iisServer.Start();
-        }
-
-        [TestFixtureTearDown]
-        public void StopServer()
-        {
-            iisServer.Stop();
-        }
-
-        #endregion
-
         /// <summary>
         /// Runs the ASP unit tests for Order class.
         /// </summary>
         [Test]
         public void OrderTests()
         {
-            var runner = Runner.Create(AspTestUrl)
-                .WithEncoding(Encoding.UTF8).WithTestContainer("OrderTest");
-            var results = runner.Run();
-
-            // this results in slightly cleaner output than Assert.That(results.Successful...)
-            if (!results.Successful)
-                Assert.Fail(results.Format());
-
-            if (results.Tests == 0)
-                Assert.Inconclusive("0 tests were run");
+            RunAspTests("OrderTest");
         }
     }
 }

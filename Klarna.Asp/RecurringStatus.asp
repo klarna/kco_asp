@@ -1,4 +1,4 @@
-﻿<!-- #include file="json2.asp" -->
+<!-- #include file="json2.asp" -->
 
 <%
 '------------------------------------------------------------------------------
@@ -21,28 +21,30 @@
 '------------------------------------------------------------------------------
 
 '--------------------------------------------------------------------------
-' Creates a new instance of the Order class.
+' Creates a new instance of the RecurringStatus class.
 '
 ' Parameters:
 ' object    connector    The connector to use.
+' string    token        The recurring token.
 '
 ' Returns:
-' The order instance.
+' The recurring status instance.
 '--------------------------------------------------------------------------
-Public Function CreateOrder(connector)
-    Dim order
-    Set order = new Order
+Public Function CreateRecurringStatus(connector, token)
+    Dim status
+    Set status = new RecurringStatus
 
-    order.SetConnector(connector)
-    order.SetContentType "application/vnd.klarna.checkout.aggregated-order-v2+json"
+    status.SetConnector(connector)
+    status.SetToken(token)
+    status.SetContentType "application/vnd.klarna.checkout.recurring-status-v1+json"
 
-    Set CreateOrder = order
+    Set CreateRecurringStatus = status
 End Function
 
 '------------------------------------------------------------------------------
-' The order resource.
+' The recurring status resource.
 '------------------------------------------------------------------------------
-Class Order
+Class RecurringStatus
     ' -------------------------------------------------------------------------
     ' Private members
     ' -------------------------------------------------------------------------
@@ -61,10 +63,10 @@ Class Order
         Set m_resourceData = Nothing
         Set m_connector = Nothing
         Set m_error = Nothing
-        m_accept = ""
         m_location = ""
+        m_accept = ""
         m_contentType = ""
-        m_path = "/checkout/orders"
+        m_path = ""
     End Sub
 
     Private Sub Class_Terminate
@@ -82,6 +84,16 @@ Class Order
     Public Sub SetConnector(connector)
         Set m_connector = connector
     End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Sets the recurring token.
+    '
+    ' Parameter:
+    ' string    The recurring token.
+    ' -------------------------------------------------------------------------
+    Public Function SetToken(token)
+        m_path = "/checkout/recurring/" & token
+    End Function
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the uri of the resource.
@@ -179,44 +191,14 @@ Class Order
     End Function
 
     ' -------------------------------------------------------------------------
-    ' Creates a new order.
-    '
-    ' Parameter:
-    ' string    The data.
-    ' -------------------------------------------------------------------------
-    Public Function Create(data)
-        Dim options
-        Set options = Server.CreateObject("Scripting.Dictionary")
-        options.Add "path", m_path
-        options.Add "data", data
-
-        Call m_connector.Apply("POST", Me, options)
-    End Function
-
-    ' -------------------------------------------------------------------------
-    ' Fetches order data.
+    ' Fetches the recurring status.
     ' -------------------------------------------------------------------------
     Public Function Fetch()
         Dim options
         Set options = Server.CreateObject("Scripting.Dictionary")
-        options.Add "url", m_location
+        options.Add "path", m_path
 
         Call m_connector.Apply("GET", Me, options)
-    End Function
-
-    ' -------------------------------------------------------------------------
-    ' Updates order data.
-    '
-    ' Parameter:
-    ' string    The data.
-    ' -------------------------------------------------------------------------
-    Public Function Update(data)
-        Dim options
-        Set options = Server.CreateObject("Scripting.Dictionary")
-        options.Add "url", m_location
-        options.Add "data", data
-
-        Call m_connector.Apply("POST", Me, options)
     End Function
 
 End Class

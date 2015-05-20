@@ -22,7 +22,7 @@
 %>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
-<!-- #include file="../Klarna.Asp/Order.asp" -->
+<!-- #include file="../Klarna.Asp/RecurringOrder.asp" -->
 <!-- #include file="../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../Klarna.Asp/UserAgent.asp" -->
 <!-- #include file="../Klarna.Asp/BasicConnector.asp" -->
@@ -31,9 +31,9 @@
 <!-- #include file="../Klarna.Asp/HttpTransport.asp" -->
 <%
 '------------------------------------------------------------------------------
-' The create checkout example.
+' The create recurring order example.
 '------------------------------------------------------------------------------
-Class Create
+Class CreateRecurring
 
     '--------------------------------------------------------------------------
     ' The example.
@@ -45,6 +45,8 @@ Class Create
         eid = "0"
         Dim sharedSecret
         sharedSecret = "sharedSecret"
+        Dim token
+        token = "ABC-123"
 
         ' Create connector
         Dim connector
@@ -52,7 +54,27 @@ Class Create
         connector.SetBaseUri KCO_TEST_BASE_URI
 
         Dim order
-        Set order = CreateOrder(connector)
+        Set order = CreateRecurringOrder(connector, token)
+
+        Dim merchant
+        Set merchant = Server.CreateObject("Scripting.Dictionary")
+        merchant.Add "id", eid
+
+        ' For testing purposes you can state either 'accept' or 'reject' at
+        ' the end of the email addresses to trigger different responses,
+        Dim email
+        email = "checkout-se@testdrive.klarna.accept"
+
+        Dim address
+        Set address = Server.CreateObject("Scripting.Dictionary")
+        address.Add "postal_code", "12345"
+        address.Add "email", email
+        address.Add "country", "se"
+        address.Add "city", "Ankeborg"
+        address.Add "family_name", "Approved"
+        address.Add "given_name", "Testperson-se"
+        address.Add "street_address", "Stårgatan 1"
+        address.Add "phone", "070 111 11 11"
 
         ' Cart
         Dim item1
@@ -82,16 +104,18 @@ Class Create
         Set cart = Server.CreateObject("Scripting.Dictionary")
         cart.Add "items", cartItems
 
-        Dim merchant
-        Set merchant = Server.CreateObject("Scripting.Dictionary")
-        merchant.Add "id", eid
-        merchant.Add "terms_uri", "http://example.com/terms.asp"
-        merchant.Add "checkout_uri", "https://example.com/checkout.asp"
-        merchant.Add "confirmation_uri", _
-            "https://example.com/thankyou.asp?sid=123&klarna_order={checkout.order.uri}"
-        ' You cannot receive push notification on a non publicly available uri.
-        merchant.Add "push_uri", _
-            "https://example.com/push.asp?sid=123&klarna_order={checkout.order.uri}"
+        Dim uniqueId
+        uniqueId = "Some unique id..."
+
+        Dim reference
+        Set reference = Server.CreateObject("Scripting.Dictionary")
+        reference.Add "orderid1", uniqueId
+
+        ' If the order should be activated automatically.
+        ' Set to True if you instead want a invoice created
+        ' otherwise you will get a reservation.
+        Dim activate
+        activate = False
 
         Dim data
         Set data = Server.CreateObject("Scripting.Dictionary")
@@ -99,30 +123,48 @@ Class Create
         data.Add "purchase_currency", "SEK"
         data.Add "locale", "sv-se"
         data.Add "merchant", merchant
+        data.Add "merchant_reference", reference
+        data.Add "billing_address", address
+        data.Add "shipping_address", address
         data.Add "cart", cart
+        data.Add "activate", activate
 
         order.Create data
 
         If order.HasError = True Then
-            Response.Write("Message: " & order.GetError().Marshal().internal_message & "<br/>")
+            Dim errData
+            Set errData = order.GetError().Marshal()
+
+            If order.GetError().GetResponse().GetStatus() = 402 Then
+                Response.Write("Message: " & errData.reason & "<br/>")
+            Else
+                Response.Write("Message: " & errData.internal_message & "<br/>")
+            End If
         End If
 
         If Err.Number <> 0 Then
             Response.Write("An error occurred: " & Err.Description)
-            Err.Clear()
+            Err.Clear
 
             ' Error occurred, stop execution
             Exit Sub
         End If
 
-        Response.Write("URL: " & order.GetLocation())
+        Dim resourceData
+        Set resourceData = order.Marshal()
+
+        If activate = True Then
+            Response.Write("Invoice number: " & resourceData.invoice)
+        Else
+            Response.Write("Reservation number: " & resourceData.reservation)
+        End If
 
     End Sub
 
 End Class
 
 Dim example
-Set example = New Create
+Set example = New CreateRecurring
 Call example.Example()
 
 %>

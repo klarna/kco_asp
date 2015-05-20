@@ -38,14 +38,14 @@ Class BasicConnectorTest
         Dim ua
         Set ua = m_connector.GetUserAgent
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_1.0.2 Language/ASP_Classic", ua.ToString, "")
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic", ua.ToString, "")
 
         ua.AddField "JS Lib", "jQuery", "1.8.2", Null
 
         Dim ua2
         Set ua2 = m_connector.GetUserAgent
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_1.0.2 Language/ASP_Classic JS Lib/jQuery_1.8.2", ua2.ToString, "")
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic JS Lib/jQuery_1.8.2", ua2.ToString, "")
     End Sub
 
     '--------------------------------------------------------------------------
@@ -161,6 +161,8 @@ Class BasicConnectorTest
             Call m_connector.Apply("GET", order, options)
 
             Call testResult.AssertEquals(errorCode, Err.Number, "")
+            Call testResult.AssertEquals(True, order.HasError, "")
+            Call testResult.AssertEquals(2012, order.GetError.Year, "")
 
             Err.Clear()
         Next
@@ -182,7 +184,7 @@ Class BasicConnectorTest
 
             Set m_transport.m_request = New HttpRequest
             Set m_transport.m_response = New HttpResponse
-            m_transport.m_response.Create errorCode, "", "{""Year"":2012}"
+            m_transport.m_response.Create errorCode, "", "{""Year"":2013}"
             m_transport.m_responseCount = 0
 
             Dim data
@@ -193,9 +195,78 @@ Class BasicConnectorTest
             Set options = Server.CreateObject("Scripting.Dictionary")
             options.Add "data", data
 
-            Call m_connector.Apply("GET", order, options)
+            Call m_connector.Apply("POST", order, options)
 
             Call testResult.AssertEquals(errorCode, Err.Number, "")
+            Call testResult.AssertEquals(True, order.HasError, "")
+            Call testResult.AssertEquals(2013, order.GetError.Year, "")
+
+            Err.Clear()
+        Next
+    End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests Apply with POST method, with status code that is expected raise
+    ' an invalid error response payload
+    '--------------------------------------------------------------------------
+    Public Sub ApplyPostErrorInvalid(testResult)
+        On Error Resume Next
+
+        Dim errorCode
+        For Each errorCode in m_errorCodes
+            Dim order
+            Set order = New Order
+            order.SetLocation m_url
+            order.SetContentType m_contentType
+
+            Set m_transport.m_request = New HttpRequest
+            Set m_transport.m_response = New HttpResponse
+            m_transport.m_response.Create errorCode, "", "{""Year""2013}"
+            m_transport.m_responseCount = 0
+
+            Dim data
+            Set data = Server.CreateObject("Scripting.Dictionary")
+            data.Add "Year", 2012
+
+            Dim options
+            Set options = Server.CreateObject("Scripting.Dictionary")
+            options.Add "data", data
+
+            Call m_connector.Apply("POST", order, options)
+
+            Call testResult.AssertEquals(errorCode, Err.Number, "")
+            Call testResult.AssertEquals(False, order.HasError, "")
+
+            Err.Clear()
+        Next
+    End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests Apply with POST method, with status code that is expected raise
+    ' an empty error response payload
+    '--------------------------------------------------------------------------
+    Public Sub ApplyPostErrorEmpty(testResult)
+        On Error Resume Next
+
+        Dim errorCode
+        For Each errorCode in m_errorCodes
+            Dim order
+            Set order = New Order
+            order.SetLocation m_url
+            order.SetContentType m_contentType
+
+            Set m_transport.m_request = New HttpRequest
+            Set m_transport.m_response = New HttpResponse
+            m_transport.m_response.Create errorCode, "", ""
+            m_transport.m_responseCount = 0
+
+            Dim options
+            Set options = Server.CreateObject("Scripting.Dictionary")
+
+            Call m_connector.Apply("POST", order, options)
+
+            Call testResult.AssertEquals(errorCode, Err.Number, "")
+            Call testResult.AssertEquals(False, order.HasError, "")
 
             Err.Clear()
         Next

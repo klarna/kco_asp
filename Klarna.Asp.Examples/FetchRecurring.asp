@@ -1,4 +1,4 @@
-﻿<%@ LANGUAGE="VBSCRIPT" %>
+<%@ LANGUAGE="VBSCRIPT" %>
 <% Option Explicit %>
 <%
 '------------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 %>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
-<!-- #include file="../Klarna.Asp/Order.asp" -->
+<!-- #include file="../Klarna.Asp/RecurringStatus.asp" -->
 <!-- #include file="../Klarna.Asp/Digest.asp" -->
 <!-- #include file="../Klarna.Asp/UserAgent.asp" -->
 <!-- #include file="../Klarna.Asp/BasicConnector.asp" -->
@@ -31,37 +31,33 @@
 <!-- #include file="../Klarna.Asp/HttpTransport.asp" -->
 <%
 '------------------------------------------------------------------------------
-' The confirmation example.
+' The fetch recurring status example.
 '------------------------------------------------------------------------------
-Class Confirmation
+Class FetchRecurring
 
     '--------------------------------------------------------------------------
-    ' This example demonstrates the use of the Klarna library to complete
-    ' the purchase and display the confirmation page snippet.
+    ' The example.
     '--------------------------------------------------------------------------
     Public Sub Example()
         On Error Resume Next
 
         Dim sharedSecret
         sharedSecret = "sharedSecret"
+        Dim token
+        token = "ABC-123"
 
         ' Create connector
         Dim connector
         Set connector = CreateConnector(sharedSecret)
+        connector.SetBaseUri KCO_TEST_BASE_URI
 
-        ' Retrieve location from session object.
-        ' Use following in ASP.
-        Dim checkoutId
-        checkoutId = Session("klarna_checkout")
+        Dim status
+        Set status = CreateRecurringStatus(connector, token)
 
-        Dim order
-        Set order = CreateOrder(connector)
-        order.SetLocation checkoutId
+        status.Fetch
 
-        order.Fetch
-
-        If order.HasError = True Then
-            Response.Write("Message: " & order.GetError().Marshal().internal_message & "<br/>")
+        If status.HasError = True Then
+            Response.Write("Message: " & status.GetError().Marshal().internal_message & "<br/>")
         End If
 
         If Err.Number <> 0 Then
@@ -73,35 +69,16 @@ Class Confirmation
         End If
 
         Dim resourceData
-        Set resourceData = order.Marshal()
-        If resourceData.status = "checkout_incomplete" Then
-            ' Report error
+        Set resourceData = status.Marshal()
 
-            ' Use following in ASP.
-            Response.Write("Checkout not completed, redirect to checkout.asp")
-
-            Exit Sub
-        End If
-
-        ' Display thank you snippet
-        Dim snippet
-        snippet = resourceData.gui.snippet
-
-        ' DESKTOP: Width of containing block shall be at least 750px
-        ' MOBILE: Width of containing block shall be 100% of browser
-        ' window (No padding or margin)
-        ' Use following in ASP.
-        Response.Write("<div>" & snippet & "</div>")
-
-        ' Clear session object.
-        Session("klarna_checkout") = ""
+        Response.Write("Payment method: " & resourceData.payment_method.type)
 
     End Sub
 
 End Class
 
 Dim example
-Set example = New Confirmation
+Set example = New FetchRecurring
 Call example.Example()
 
 %>

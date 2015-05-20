@@ -1,7 +1,7 @@
 ﻿#region Copyright Header
 // ----------------------------------------------------------------------------
-// <copyright file="OrderTest.cs" company="Klarna AB">
-//     Copyright 2013 Klarna AB
+// <copyright file="RecurringStatusTest.cs" company="Klarna AB">
+//     Copyright 2015 Klarna AB
 //
 //     Licensed under the Apache License, Version 2.0 (the "License");
 //     you may not use this file except in compliance with the License.
@@ -24,18 +24,18 @@ namespace Klarna.Asp.Tests
     using NUnit.Framework;
 
     /// <summary>
-    /// Tests the ASP HttpTransport class.
+    /// Tests the ApiError class.
     /// </summary>
     [TestFixture]
-    public class HttpTransportTest : TestCase
+    public class ApiErrorTest : TestCase
     {
         /// <summary>
-        /// Runs the ASP unit tests for HttpTransport class.
+        /// Runs the ASP unit tests for ApiError class.
         /// </summary>
         [Test]
-        public void HttpTransportTests()
+        public void ApiErrorTests()
         {
-            RunAspTests("HttpTransportTest");
+            RunAspTests("ApiErrorTest");
         }
     }
 }

@@ -1,8 +1,8 @@
-## Klarna Checkout ASP library
+﻿## Klarna Checkout ASP library
 Klarna Checkout is a revolutionary new payment solution that is changing the way
 people shop online. First, consumers verify their purchase with a minimal
 amount of information through intelligent identification, securing your order
-immediately, and then complete their payment afterwards � separating buying
+immediately, and then complete their payment afterwards - separating buying
 from paying and dramatically increasing conversion. Klarna Checkout also allows
 merchants to offer all payment methods through one supplier, minimizing
 administration, costs and integration time.
@@ -38,7 +38,7 @@ To contribute, the following criteria needs to be fulfilled:
     * Link to more information. Optional.
     * List of parameters. Optional.
     * Return value. Optional.
-    * List of errors rised. Optional.
+    * List of errors raised. Optional.
 * Line length maximum is around 80 characters.
 * New features and bug fixes must have accompanying unit tests:
     * Positive tests
@@ -56,6 +56,7 @@ please contact [integration@klarna.com](mailto:integration@klarna.com).
 * David Keijser
 * Rickard Dybeck
 * Majid Garmaroudi
+* Joakim Löfgren
 
 ## License
 The Klarna Checkout ASP library is released under

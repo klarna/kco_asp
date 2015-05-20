@@ -14,9 +14,9 @@ Class OrderTest
     Private m_theDate
 
     Public Function TestCaseNames()
-        TestCaseNames = Array("ConstructionWithConnector", _
-            "ContentType", "LocationEmpty", _
-            "LocationSetGet", "ParseAndMarshal", "ParseAndMarshalRealStructures")
+        TestCaseNames = Array("GetSetLocation", "GetSetContentType", "GetSetAccept", _
+            "GetSetError", "ParseMarshal","ParseAndMarshalRealStructures", "Create", _
+            "Fetch", "Update")
     End Function
 
     Public Sub SetUp()
@@ -33,68 +33,69 @@ Class OrderTest
     End Sub
 
     '--------------------------------------------------------------------------
-    ' Tests the construction with connector.
+    ' Tests the getter and setter for Location
     '--------------------------------------------------------------------------
-    Public Sub ConstructionWithConnector(testResult)
-        Call testResult.AssertEquals("", m_order.GetBaseUri, "BaseUri is empty")
-        Call testResult.AssertEquals("", m_order.GetLocation, "Location is empty")
-        Call testResult.AssertEquals("", m_order.GetContentType, "ContentType is empty")
-        
-        Dim data
-        Set data = m_order.Marshal()
-        Call testResult.AssertEquals(True, data Is Nothing, "Data is empty")
+    Public Sub GetSetLocation(testResult)
+        Call testResult.AssertEquals("", m_order.GetLocation(), "")
+
+        m_order.SetLocation m_url
+
+        Call testResult.AssertEquals(m_url, m_order.GetLocation(), "")
     End Sub
 
     '--------------------------------------------------------------------------
-    ' Tests that the content type is correct.
+    ' Tests the getter and setter for ContentType
     '--------------------------------------------------------------------------
-    Public Sub ContentType(testResult)
-        Call testResult.AssertEquals("", m_order.GetContentType, "")
-        m_order.SetContentType(m_contentType)
-        Call testResult.AssertEquals(m_contentType, m_order.GetContentType, "")
+    Public Sub GetSetContentType(testResult)
+        Call testResult.AssertEquals(m_contentType, m_order.GetContentType(), "")
+
+        m_order.SetContentType "test"
+
+        Call testResult.AssertEquals("test", m_order.GetContentType(), "")
     End Sub
 
     '--------------------------------------------------------------------------
-    ' Tests that the location not is initialized.
+    ' Tests the getter and setter for Accept
     '--------------------------------------------------------------------------
-    Public Sub LocationEmpty(testResult)
-        Call testResult.AssertEquals("", m_order.GetLocation, "")
+    Public Sub GetSetAccept(testResult)
+        Call testResult.AssertEquals("", m_order.GetAccept(), "")
+
+        m_order.SetAccept "test"
+
+        Call testResult.AssertEquals("test", m_order.GetAccept(), "")
     End Sub
 
     '--------------------------------------------------------------------------
-    ' Tests set/get location.
+    ' Tests the getter, setter and has error methods
     '--------------------------------------------------------------------------
-    Public Sub LocationSetGet(testResult)
-        Call testResult.AssertEquals("", m_order.GetLocation, "")
-        m_order.SetLocation(m_url)
-        Call testResult.AssertEquals(m_url, m_order.GetLocation, "")
+    Public Sub GetSetError(testResult)
+        Call testResult.AssertEquals(False, m_order.HasError(), "")
+
+        Dim error
+        Set error = Server.CreateObject("Scripting.Dictionary")
+        error.Add "err", True
+
+        Call m_order.SetError(error)
+
+        Call testResult.AssertEquals(True, m_order.HasError(), "")
+        Call testResult.AssertEquals(True, m_order.GetError().Item("err"), "")
     End Sub
 
     '--------------------------------------------------------------------------
-    ' Tests that parse and marshal works correctly.
+    ' Test the JSON parsing and serializing
     '--------------------------------------------------------------------------
-    Public Sub ParseAndMarshal(testResult)
-        Dim data
-        Set data = Server.CreateObject("Scripting.Dictionary")
-        data.Add "TheInt", m_theInt
-        data.Add "TheString", m_theString
-        data.Add "TheDate", m_theDate
+    Public Sub ParseMarshal(testResult)
+        Call testResult.AssertEquals(True, m_order.Marshal() Is Nothing, "Data is empty")
 
-        Dim jx
-        Set jx = new JSONX
-        Dim json
-        json = jx.toJSON(Empty, data, true)
+        Dim json, resourceData
+        json = "{""key"":""val""}"
 
-        m_order.Parse(json)
+        Call m_order.Parse(json)
 
-        Dim resourceData
         Set resourceData = m_order.Marshal()
 
-        Call testResult.AssertEquals(True, IsObject(resourceData), "")
-        Call testResult.AssertEquals(m_theInt, resourceData.TheInt, "")
-        Call testResult.AssertEquals(m_theString, resourceData.TheString, "")
-        Call testResult.AssertEquals(m_theDate, resourceData.TheDate, "")
-
+        Call testResult.AssertEquals("val", resourceData.key, "")
+        Call testResult.AssertEquals(json, m_order.MarshalAsJson(), "")
     End Sub
 
     '--------------------------------------------------------------------------
@@ -185,8 +186,52 @@ Class OrderTest
         Call testResult.AssertEquals(450, resourceData.cart.items.[1].unit_price, "")
         Call testResult.AssertEquals(0, resourceData.cart.items.[1].discount_rate, "")
         Call testResult.AssertEquals(2500, resourceData.cart.items.[1].tax_rate, "")
-
     End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests that Create works correctly.
+    '--------------------------------------------------------------------------
+    Public Sub Create(testResult)
+        Dim data
+        Set data = Server.CreateObject("Scripting.Dictionary")
+        data.Add "foo", "boo"
+
+        Call m_order.Create(data)
+
+        Call testResult.AssertEquals("POST", m_connector.m_httpMethod, "")
+        Call testResult.AssertEquals("/checkout/orders", m_connector.m_options.Item("path"), "")
+        Call testResult.AssertEquals(data.Item("foo"), m_connector.m_options.Item("data").Item("foo"), "")
+    End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests that Fetch works correctly.
+    '--------------------------------------------------------------------------
+    Public Sub Fetch(testResult)
+        Call m_order.SetLocation(m_url)
+
+        Call m_order.Fetch()
+
+        Call testResult.AssertEquals("GET", m_connector.m_httpMethod, "")
+        Call testResult.AssertEquals(m_url, m_connector.m_options.Item("url"), "")
+    End Sub
+
+    '--------------------------------------------------------------------------
+    ' Tests that Update works correctly.
+    '--------------------------------------------------------------------------
+    Public Sub Update(testResult)
+        Call m_order.SetLocation(m_url)
+
+        Dim data
+        Set data = Server.CreateObject("Scripting.Dictionary")
+        data.Add "foo", "boo"
+
+        Call m_order.Update(data)
+
+        Call testResult.AssertEquals("POST", m_connector.m_httpMethod, "")
+        Call testResult.AssertEquals(m_url, m_connector.m_options.Item("url"), "")
+        Call testResult.AssertEquals(data.Item("foo"), m_connector.m_options.Item("data").Item("foo"), "")
+    End Sub
+
 End Class
 
 %>

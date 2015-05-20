@@ -1,10 +1,13 @@
 ﻿<%
 '------------------------------------------------------------------------------
-'   Copyright 2013 Klarna AB
+'   Copyright 2015 Klarna AB
+'
 '   Licensed under the Apache License, Version 2.0 (the "License");
 '   you may not use this file except in compliance with the License.
 '   You may obtain a copy of the License at
+'
 '       http://www.apache.org/licenses/LICENSE-2.0
+'
 '   Unless required by applicable law or agreed to in writing, software
 '   distributed under the License is distributed on an "AS IS" BASIS,
 '   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +18,28 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 
+Const KCO_TEST_BASE_URI = "https://checkout.testdrive.klarna.com"
+Const KCO_BASE_URI = "https://checkout.klarna.com"
+
 '--------------------------------------------------------------------------
-' Creates a new instance or the BasicConnector class.
+' Creates a new instance of the BasicConnector class.
+'
+' Parameters:
+' string    secret           The secret to use.
+'
+' Returns:
+' The basic connector instance.
+'--------------------------------------------------------------------------
+Public Function CreateConnector(secret)
+    Dim digest, transport
+    Set transport = New HttpTransport
+    Set digest = new Digest
+
+    Set CreateConnector = CreateBasicConnector(transport, digest, secret)
+End Function
+
+'--------------------------------------------------------------------------
+' Creates a new instance of the BasicConnector class.
 '
 ' Parameters:
 ' object    httpTransport    The HTTP transport to use.
@@ -43,6 +66,7 @@ Class BasicConnector
     ' -------------------------------------------------------------------------
     ' Private members
     ' -------------------------------------------------------------------------
+    Private m_baseUri
     Private m_userAgent
     Private m_httpTransport
     Private m_digest
@@ -53,9 +77,11 @@ Class BasicConnector
     ' -------------------------------------------------------------------------
     Private Sub Class_Initialize
         Set m_userAgent = new UserAgent
+        m_baseUri = KCO_BASE_URI
     End Sub
 
     Private Sub Class_Terminate
+        Set m_userAgent = Nothing
     End Sub
 
     Public Sub SetHttpTransport(httpTransport)
@@ -69,6 +95,20 @@ Class BasicConnector
     Public Sub SetSecret(secret)
         m_secret = secret
     End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Gets or sets the base uri.
+    '
+    ' Parameter/Returns:
+    ' string    The uri.
+    ' -------------------------------------------------------------------------
+    Public Function GetBaseUri()
+        GetBaseUri = m_baseUri
+    End Function
+
+    Public Function SetBaseUri(uri)
+        m_baseUri = uri
+    End Function
 
     ' -------------------------------------------------------------------------
     ' Gets or sets the user agent used for User-Agent header.
@@ -89,14 +129,14 @@ Class BasicConnector
     '
     ' Parameters:
     ' string    httpMethod      The HTTP method, GET or POST.
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' object    options         The options.
     ' -------------------------------------------------------------------------
-    Public Function Apply(httpMethod, order, options)
+    Public Function Apply(httpMethod, resource, options)
         Dim visitedUrl
         Set visitedUrl = Server.CreateObject("Scripting.Dictionary")
 
-        Handle httpMethod, order, options, visitedUrl
+        Handle httpMethod, resource, options, visitedUrl
     End Function
 
     ' -------------------------------------------------------------------------
@@ -104,43 +144,43 @@ Class BasicConnector
     '
     ' Parameters:
     ' string    httpMethod      The HTTP method, GET or POST.
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' object    options         The options.
     ' object    visitedUrl      List of visited url.
     '
     ' Returns:
     ' object    The response.
     ' -------------------------------------------------------------------------
-    Private Function Handle(httpMethod, order, options, visitedUrl)
+    Private Function Handle(httpMethod, resource, options, visitedUrl)
         Dim url
-        url = GetUrl(order, options)
+        url = GetUrl(resource, options)
 
         Dim payLoad
         payLoad = ""
         If httpMethod = "POST" Then
-            payLoad = GetData(order, options)
+            payLoad = GetData(resource, options)
         End If
 
         Dim request
-        Set request = CreateRequest(order, httpMethod, payLoad, url)
+        Set request = CreateRequest(resource, httpMethod, payLoad, url)
 
         Dim response
         Set response = m_httpTransport.Send(request)
 
-        Set Handle = HandleResponse(response, httpMethod, order, visitedUrl)
+        Set Handle = HandleResponse(response, httpMethod, resource, visitedUrl)
     End Function
 
     ' -------------------------------------------------------------------------
     ' Gets the url to use, from options or resource.
     '
     ' Parameters:
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' object    options         The options.
     '
     ' Returns:
     ' string    The url.
     ' -------------------------------------------------------------------------
-    Private Function GetUrl(order, options)
+    Private Function GetUrl(resource, options)
         const URL_KEY = "url"
 
         Dim urlInOptions
@@ -154,8 +194,10 @@ Class BasicConnector
         Dim url
         If urlInOptions Then
             url = options.Item(URL_KEY)
+        ElseIf Len(resource.GetLocation) > 0 Then
+            url = resource.GetLocation
         Else
-            url = order.GetLocation
+            url = Me.GetBaseUri & options.Item("path")
         End If
 
         GetUrl = url
@@ -165,13 +207,13 @@ Class BasicConnector
     ' Gets data to use, from options or resource.
     '
     ' Parameters:
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' object    options         The options.
     '
     ' Returns:
     ' string    The data  in JSON format.
     ' -------------------------------------------------------------------------
-    Private Function GetData(order, options)
+    Private Function GetData(resource, options)
         const DATA_KEY = "data"
 
         Dim dataInOptions
@@ -191,7 +233,7 @@ Class BasicConnector
             Set jx = new JSONX
             data = jx.toJSON(Empty, dictionaryData, true)
         Else
-            data = order.MarshalAsJson
+            data = resource.MarshalAsJson
         End If
 
         GetData = data
@@ -201,7 +243,7 @@ Class BasicConnector
     ' Creates a request.
     '
     ' Parameters:
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' string    httpMethod      The HTTP method, GET or POST.
     ' string    payLoad         The payload.
     ' string    url             The url to use.
@@ -209,7 +251,7 @@ Class BasicConnector
     ' Returns:
     ' object    The request.
     ' -------------------------------------------------------------------------
-    Private Function CreateRequest(order, httpMethod, payLoad, url)
+    Private Function CreateRequest(resource, httpMethod, payLoad, url)
         ' Create the request with correct method to use
         Dim request
         Set request = m_httpTransport.CreateRequest(url)
@@ -225,10 +267,13 @@ Class BasicConnector
         authorization = "Klarna " & digestString
         request.SetHeader "Authorization", authorization
 
-        request.SetHeader "Accept", order.GetContentType
+        request.SetHeader "Accept", resource.GetContentType
+        If Len(resource.GetAccept) > 0 Then
+            request.SetHeader "Accept", resource.GetAccept
+        End If
 
         If Len(payLoad) > 0 Then
-            request.SetHeader "Content-Type", order.GetContentType
+            request.SetHeader "Content-Type", resource.GetContentType
             request.SetData payLoad
         End If
 
@@ -241,14 +286,14 @@ Class BasicConnector
     ' Parameters:
     ' object    response        The response to handle.
     ' string    httpMethod      The HTTP method, GET or POST.
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' object    visitedUrl      List of visited url.
     '
     ' Returns:
     ' object    The response.
     ' -------------------------------------------------------------------------
-    Private Function HandleResponse(response, httpMethod, order, visitedUrl)
-        VerifyResponse response
+    Private Function HandleResponse(response, httpMethod, resource, visitedUrl)
+        VerifyResponse response, resource
 
         Dim uri
         uri = response.GetHeader("Location")
@@ -256,32 +301,32 @@ Class BasicConnector
         Dim statusCode
         statusCode = response.GetStatus()
         If statusCode = 200 Then        ' Update Data on resource.
-            On Error resume Next
+            On Error Resume Next
 
             Dim data
             data = response.GetData()
             If Len(data) > 0 Then
-                order.Parse data
+                resource.Parse data
             End If
 
             If Err.Number <> 0 Then
                 Err.Raise Err.Number, "Connector error", "Bad format on response content."
             End If
         ElseIf statusCode = 201 Then    ' Update location.
-            order.SetLocation uri
+            resource.SetLocation uri
         ElseIf statusCode = 301 Then    ' Update location and redirect if method is GET.
-            order.SetLocation uri
+            resource.SetLocation uri
             If httpMethod = "GET" Then
-                Set HandleResponse = MakeRedirect(order, visitedUrl, uri)
+                Set HandleResponse = MakeRedirect(resource, visitedUrl, uri)
                 Exit Function
             End If
         ElseIf statusCode = 302 Then    ' Redirect if method is GET.
             If httpMethod = "GET" Then
-                Set HandleResponse = MakeRedirect(order, visitedUrl, uri)
+                Set HandleResponse = MakeRedirect(resource, visitedUrl, uri)
                 Exit Function
             End If
         ElseIf statusCode = 303 Then    ' Redirect with GET, even if request is POST.
-            Set HandleResponse = MakeRedirect(order, visitedUrl, uri)
+            Set HandleResponse = MakeRedirect(resource, visitedUrl, uri)
             Exit Function
         End If
 
@@ -293,12 +338,21 @@ Class BasicConnector
     '
     ' Parameters:
     ' object    response        The response to verify.
+    ' object    resource        The resource which sent the request.
     ' -------------------------------------------------------------------------
-    Private Sub VerifyResponse(response)
+    Private Sub VerifyResponse(response, resource)
         Dim statusCode
-        statusCode = response.GetStatus
+        statusCode = response.GetStatus()
+
         If statusCode >= 400 And statusCode <= 599 Then
-            Err.Raise statusCode, "BasicConnector:VerifyResponse", "HTTP error code"
+            Dim apiErr
+            Set apiErr = CreateApiError(response)
+
+            resource.SetError(apiErr)
+
+            Dim description
+            description = "HTTP status code " & statusCode & " received"
+            Err.Raise statusCode, "BasicConnector:VerifyResponse", description
         End If
     End Sub
 
@@ -306,14 +360,14 @@ Class BasicConnector
     ' Makes a redirect.
     '
     ' Parameters:
-    ' object    order           The resource.
+    ' object    resource        The resource.
     ' object    visitedUrl      List of visited url.
     ' string    url             The url to use.
     '
     ' Returns:
     ' object    The response.
     ' -------------------------------------------------------------------------
-    Private Function MakeRedirect(order, visitedUrl, url)
+    Private Function MakeRedirect(resource, visitedUrl, url)
         If visitedUrl.Exists(url) Then
             Err.Raise 5, "BasicConnector:MakeRedirect", "Infinite redirect loop detected."
         End If
@@ -324,7 +378,7 @@ Class BasicConnector
         Set options = Server.CreateObject("Scripting.Dictionary")
         options.Add "url", url
 
-        Set MakeRedirect = Handle("GET", order, options, visitedUrl)
+        Set MakeRedirect = Handle("GET", resource, options, visitedUrl)
     End Function
 
 End Class
