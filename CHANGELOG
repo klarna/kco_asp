@@ -2,6 +2,13 @@
 Klarna Checkout ASP library
 ===========================
 
+v2.1.0
+----------------
+Date: 2015-06-03
+
+    Christer G. <support@klarna.com>
+        Add helper method ID to Order class for setting location.
+
 v2.0.0
 ----------------
 Date: 2015-05-20

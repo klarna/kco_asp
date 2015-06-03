@@ -21,7 +21,7 @@ Class UserAgentTest
     ' Tests Default UA string.
     '--------------------------------------------------------------------------
     Public Sub Creation(testResult)
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic", _
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.1.0 Language/ASP_Classic", _
                                         ua.ToString, "The UA string")
     End Sub
 
@@ -31,7 +31,7 @@ Class UserAgentTest
     Public Sub AddFieldWithoutOptions(testResult)
         ua.AddField "JS Lib", "jQuery", "1.8.2", Null
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic JS Lib/jQuery_1.8.2", _
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.1.0 Language/ASP_Classic JS Lib/jQuery_1.8.2", _
                                         ua.ToString, "The UA string")
     End Sub
 
@@ -43,7 +43,7 @@ Class UserAgentTest
         options = Array("LanguagePack/7", "JsLib/2.0")
         ua.AddField "Module", "Magento", "5.0,", options
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic Module/Magento_5.0, LanguagePack/7;JsLib/2.0", _
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.1.0 Language/ASP_Classic Module/Magento_5.0, LanguagePack/7;JsLib/2.0", _
                                         ua.ToString, "The UA string")
     End Sub
 
