@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>Checkout.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
@@ -41,15 +42,15 @@ Class Checkout
     Public Sub Example()
         On Error Resume Next
 
-        Dim eid
-        eid = "0"
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
+        Dim eid : eid = "0"
+        Dim sharedSecret : sharedSecret = "sharedSecret"
+        ' Retrieve location from session object.
+        Dim orderID : orderID = Session("klarna_order_id")
 
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
+        Dim connector : Set connector = CreateConnector(sharedSecret)
         connector.SetBaseUri KCO_TEST_BASE_URI
+
+        Dim order : Set order = Nothing
 
         ' Cart
         Dim item1
@@ -79,18 +80,12 @@ Class Checkout
         Set cart = Server.CreateObject("Scripting.Dictionary")
         cart.Add "items", cartItems
 
-        Dim order
-        Set order = Nothing
-
         Dim data
         Set data = Server.CreateObject("Scripting.Dictionary")
 
-        ' Retrieve location from session object.
-        Dim resourceUri
-        resourceUri = Session("klarna_checkout")
-        If resourceUri <> "" Then
+        If orderID <> "" Then
             Set order = CreateOrder(connector)
-            order.SetLocation resourceUri
+            order.ID orderID
 
             order.Fetch
 
@@ -109,14 +104,15 @@ Class Checkout
         If order Is Nothing Then
             ' Start a new session
 
-            Dim merchant
-            Set merchant = Server.CreateObject("Scripting.Dictionary")
+            Dim merchant : Set merchant = Server.CreateObject("Scripting.Dictionary")
             merchant.Add "id", eid
-            merchant.Add "terms_uri", "http://localhost/terms.html"
+            merchant.Add "terms_uri", "http://localhost/terms.asp"
             merchant.Add "checkout_uri", "http://localhost/checkout.asp"
-            merchant.Add "confirmation_uri", "http://localhost/confirmation.asp"
+            merchant.Add "confirmation_uri", "https://example.com/confirmation.asp" _
+                & "?klarna_order_id={checkout.order.id}"
             ' You cannot receive push notification on a non publicly available uri.
-            merchant.Add "push_uri", "http://localhost/push.asp"
+            merchant.Add "push_uri", "https://example.com/push.asp" _
+                & "?klarna_order_id={checkout.order.id}"
 
             data.RemoveAll()
             data.Add "purchase_country", "SE"
@@ -124,6 +120,8 @@ Class Checkout
             data.Add "locale", "sv-se"
             data.Add "merchant", merchant
             data.Add "cart", cart
+
+            ' data.Add "recurring", True
 
             Set order = CreateOrder(connector)
 
@@ -143,14 +141,13 @@ Class Checkout
             Exit Sub
         End If
 
+        Dim resourceData : Set resourceData = order.Marshal()
+
         ' Store location of checkout session is session object.
-        Session("klarna_checkout") = order.GetLocation
+        Session("klarna_order_id") = resourceData.id
 
         ' Display checkout
-        Dim resourceData
-        Set resourceData = order.Marshal()
-        Dim snippet
-        snippet = resourceData.gui.snippet
+        Dim snippet : snippet = resourceData.gui.snippet
 
         ' DESKTOP: Width of containing block shall be at least 750px
         ' MOBILE: Width of containing block shall be 100% of browser

@@ -38,14 +38,14 @@ Class BasicConnectorTest
         Dim ua
         Set ua = m_connector.GetUserAgent
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic", ua.ToString, "")
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.1.0 Language/ASP_Classic", ua.ToString, "")
 
         ua.AddField "JS Lib", "jQuery", "1.8.2", Null
 
         Dim ua2
         Set ua2 = m_connector.GetUserAgent
 
-        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.0.0 Language/ASP_Classic JS Lib/jQuery_1.8.2", ua2.ToString, "")
+        Call testResult.AssertEquals("Library/Klarna.ApiWrapper_2.1.0 Language/ASP_Classic JS Lib/jQuery_1.8.2", ua2.ToString, "")
     End Sub
 
     '--------------------------------------------------------------------------

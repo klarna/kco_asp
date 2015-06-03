@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>Create.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
@@ -41,18 +42,13 @@ Class Create
     Public Sub Example()
         On Error Resume Next
 
-        Dim eid
-        eid = "0"
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
+        Dim eid : eid = "0"
+        Dim sharedSecret : sharedSecret = "sharedSecret"
 
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
+        Dim connector : Set connector = CreateConnector(sharedSecret)
         connector.SetBaseUri KCO_TEST_BASE_URI
 
-        Dim order
-        Set order = CreateOrder(connector)
+        Dim order : Set order = CreateOrder(connector)
 
         ' Cart
         Dim item1
@@ -87,11 +83,11 @@ Class Create
         merchant.Add "id", eid
         merchant.Add "terms_uri", "http://example.com/terms.asp"
         merchant.Add "checkout_uri", "https://example.com/checkout.asp"
-        merchant.Add "confirmation_uri", _
-            "https://example.com/thankyou.asp?sid=123&klarna_order={checkout.order.uri}"
+        merchant.Add "confirmation_uri", "https://example.com/confirmation.asp" _ 
+            & "?klarna_order_id={checkout.order.id}"
         ' You cannot receive push notification on a non publicly available uri.
-        merchant.Add "push_uri", _
-            "https://example.com/push.asp?sid=123&klarna_order={checkout.order.uri}"
+        merchant.Add "push_uri", "https://example.com/push.asp" _
+            & "?klarna_order_id={checkout.order.id}"
 
         Dim data
         Set data = Server.CreateObject("Scripting.Dictionary")
@@ -100,6 +96,8 @@ Class Create
         data.Add "locale", "sv-se"
         data.Add "merchant", merchant
         data.Add "cart", cart
+
+        ' data.Add "recurring", True
 
         order.Create data
 

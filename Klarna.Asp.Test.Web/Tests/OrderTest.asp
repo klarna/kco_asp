@@ -14,7 +14,7 @@ Class OrderTest
     Private m_theDate
 
     Public Function TestCaseNames()
-        TestCaseNames = Array("GetSetLocation", "GetSetContentType", "GetSetAccept", _
+        TestCaseNames = Array("ID", "GetSetLocation", "GetSetContentType", "GetSetAccept", _
             "GetSetError", "ParseMarshal","ParseAndMarshalRealStructures", "Create", _
             "Fetch", "Update")
     End Function
@@ -30,6 +30,14 @@ Class OrderTest
     End Sub
 
     Public Sub TearDown()
+    End Sub
+
+    Public Sub ID(testResult)
+        Call testResult.AssertEquals("", m_order.GetLocation(), "")
+
+        m_order.ID "1234"
+
+        Call testResult.AssertEquals("http://stub.com/checkout/orders/1234", m_order.GetLocation(), "")
     End Sub
 
     '--------------------------------------------------------------------------

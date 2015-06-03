@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>Push.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
@@ -41,20 +42,16 @@ Class Push
     Public Sub Example()
         On Error Resume Next
 
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
-
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
-
+        Dim sharedSecret : sharedSecret = "sharedSecret"
         ' Retrieve location from query string.
         ' Use following in ASP.
-        Dim checkoutId
-        checkoutId = Request.QueryString("checkout_uri")
-        Dim order
-        Set order = CreateOrder(connector)
-        order.SetLocation checkoutId
+        Dim orderID : orderID = Request.QueryString("klarna_order_id")
+
+        Dim connector : Set connector = CreateConnector(sharedSecret)
+        connector.SetBaseUri KCO_TEST_BASE_URI
+
+        Dim order : Set order = CreateOrder(connector)
+        order.ID orderID
 
         order.Fetch
 

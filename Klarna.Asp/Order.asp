@@ -84,6 +84,16 @@ Class Order
     End Sub
 
     ' -------------------------------------------------------------------------
+    ' Sets the uri of the resource with a ID.
+    '
+    ' Parameter/Returns:
+    ' string    The order ID.
+    ' -------------------------------------------------------------------------
+    Public Function ID(orderID)
+        m_location = m_connector.GetBaseUri() & m_path & "/" & orderID
+    End Function
+
+    ' -------------------------------------------------------------------------
     ' Gets or sets the uri of the resource.
     '
     ' Parameter/Returns:

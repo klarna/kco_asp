@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>FetchRecurring.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/RecurringStatus.asp" -->
@@ -41,23 +42,19 @@ Class FetchRecurring
     Public Sub Example()
         On Error Resume Next
 
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
-        Dim token
-        token = "ABC-123"
+        Dim sharedSecret : sharedSecret = "sharedSecret"
+        Dim recurringToken : recurringToken = "ABC123"
 
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
+        Dim connector : Set connector = CreateConnector(sharedSecret)
         connector.SetBaseUri KCO_TEST_BASE_URI
 
-        Dim status
-        Set status = CreateRecurringStatus(connector, token)
+        Dim recurringStatus
+        Set recurringStatus = CreateRecurringStatus(connector, recurringToken)
 
-        status.Fetch
+        recurringStatus.Fetch
 
-        If status.HasError = True Then
-            Response.Write("Message: " & status.GetError().Marshal().internal_message & "<br/>")
+        If recurringStatus.HasError = True Then
+            Response.Write("Message: " & recurringStatus.GetError().Marshal().internal_message & "<br/>")
         End If
 
         If Err.Number <> 0 Then
@@ -69,7 +66,7 @@ Class FetchRecurring
         End If
 
         Dim resourceData
-        Set resourceData = status.Marshal()
+        Set resourceData = recurringStatus.Marshal()
 
         Response.Write("Payment method: " & resourceData.payment_method.type)
 

@@ -1,11 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klarna.Asp.Tests", "Klarna.Asp.Tests\Klarna.Asp.Tests.csproj", "{BD48F8F9-400F-4FF1-B8D1-D205C04BC043}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klarna.Asp.Tests.Web", "Klarna.Asp.Test.Web\Klarna.Asp.Tests.Web.csproj", "{3CA3E2A1-531A-4F06-816E-A334E09D147D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klarna.Asp.Examples", "Klarna.Asp.Examples\Klarna.Asp.Examples.csproj", "{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klarna.Asp", "Klarna.Asp\Klarna.Asp.csproj", "{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}"
 EndProject
@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build.properties = build.properties
 		build.xml = build.xml
+		CHANGELOG = CHANGELOG
 		README.md = README.md
 		version.properties = version.properties
 	EndProjectSection
@@ -21,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{293417
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klarna.Asp.Examples", "Klarna.Asp.Examples\Klarna.Asp.Examples.csproj", "{86FAE048-81D4-472A-8252-9CFF26361E69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,16 +55,6 @@ Global
 		{3CA3E2A1-531A-4F06-816E-A334E09D147D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3CA3E2A1-531A-4F06-816E-A334E09D147D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3CA3E2A1-531A-4F06-816E-A334E09D147D}.Release|x86.ActiveCfg = Release|Any CPU
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Debug|x86.ActiveCfg = Debug|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Debug|x86.Build.0 = Debug|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Release|Any CPU.ActiveCfg = Release|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Release|Mixed Platforms.Build.0 = Release|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Release|x86.ActiveCfg = Release|x86
-		{5CEDEFF6-CF6B-4D3C-9B26-5EC900962005}.Release|x86.Build.0 = Release|x86
 		{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -72,6 +65,16 @@ Global
 		{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}.Release|Mixed Platforms.Build.0 = Release|x86
 		{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}.Release|x86.ActiveCfg = Release|x86
 		{AC5F42F8-C07F-4314-8A80-3D7E1ECE0619}.Release|x86.Build.0 = Release|x86
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{86FAE048-81D4-472A-8252-9CFF26361E69}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
