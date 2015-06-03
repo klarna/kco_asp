@@ -14,6 +14,10 @@ Class MockConnector
         Set m_options = options
     End Function
 
+    Public Function GetBaseUri()
+        GetBaseUri = "http://stub.com"
+    End Function
+
 End Class
 
 %>

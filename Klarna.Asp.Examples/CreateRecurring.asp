@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>CreateRecurring.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/RecurringOrder.asp" -->
@@ -41,20 +42,15 @@ Class CreateRecurring
     Public Sub Example()
         On Error Resume Next
 
-        Dim eid
-        eid = "0"
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
-        Dim token
-        token = "ABC-123"
+        Dim eid : eid = "0"
+        Dim sharedSecret : sharedSecret = "sharedSecret"
+        Dim recurringToken : recurringToken = "ABC123"
 
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
+        Dim connector : Set connector = CreateConnector(sharedSecret)
         connector.SetBaseUri KCO_TEST_BASE_URI
 
-        Dim order
-        Set order = CreateRecurringOrder(connector, token)
+        Dim recurringOrder
+        Set recurringOrder = CreateRecurringOrder(connector, recurringToken)
 
         Dim merchant
         Set merchant = Server.CreateObject("Scripting.Dictionary")
@@ -129,13 +125,13 @@ Class CreateRecurring
         data.Add "cart", cart
         data.Add "activate", activate
 
-        order.Create data
+        recurringOrder.Create data
 
-        If order.HasError = True Then
+        If recurringOrder.HasError = True Then
             Dim errData
-            Set errData = order.GetError().Marshal()
+            Set errData = recurringOrder.GetError().Marshal()
 
-            If order.GetError().GetResponse().GetStatus() = 402 Then
+            If recurringOrder.GetError().GetResponse().GetStatus() = 402 Then
                 Response.Write("Message: " & errData.reason & "<br/>")
             Else
                 Response.Write("Message: " & errData.internal_message & "<br/>")
@@ -151,7 +147,7 @@ Class CreateRecurring
         End If
 
         Dim resourceData
-        Set resourceData = order.Marshal()
+        Set resourceData = recurringOrder.Marshal()
 
         If activate = True Then
             Response.Write("Invoice number: " & resourceData.invoice)

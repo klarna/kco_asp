@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>Fetch.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
 <!-- #include file="../Klarna.Asp/Digest.asp" -->
@@ -40,19 +41,14 @@ Class Fetch
     Public Sub Example()
         On Error Resume Next
 
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
+        Dim sharedSecret : sharedSecret = "sharedSecret"
+        Dim orderID : orderID = "ABC123"
 
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
+        Dim connector : Set connector = CreateConnector(sharedSecret)
+        connector.SetBaseUri KCO_TEST_BASE_URI
 
-        Dim resourceUri
-        resourceUri = "https://checkout.testdrive.klarna.com/checkout/orders/ABC123"
-
-        Dim order
-        Set order = CreateOrder(connector)
-        order.SetLocation resourceUri
+        Dim order : Set order = CreateOrder(connector)
+        order.ID orderID
 
         order.Fetch
 

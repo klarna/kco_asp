@@ -20,6 +20,7 @@
 '   http://developers.klarna.com/
 '------------------------------------------------------------------------------
 %>
+<title>Confirmation.asp</title>
 <!-- #include file="../Klarna.Asp/ApiError.asp" -->
 <!-- #include file="../Klarna.Asp/JSON.asp" -->
 <!-- #include file="../Klarna.Asp/Order.asp" -->
@@ -42,21 +43,16 @@ Class Confirmation
     Public Sub Example()
         On Error Resume Next
 
-        Dim sharedSecret
-        sharedSecret = "sharedSecret"
-
-        ' Create connector
-        Dim connector
-        Set connector = CreateConnector(sharedSecret)
-
+        Dim sharedSecret : sharedSecret = "sharedSecret"
         ' Retrieve location from session object.
         ' Use following in ASP.
-        Dim checkoutId
-        checkoutId = Session("klarna_checkout")
+        Dim orderID : orderID = Session("klarna_order_id")
 
-        Dim order
-        Set order = CreateOrder(connector)
-        order.SetLocation checkoutId
+        Dim connector: Set connector = CreateConnector(sharedSecret)
+        connector.SetBaseUri KCO_TEST_BASE_URI
+
+        Dim order : Set order = CreateOrder(connector)
+        order.ID orderID
 
         order.Fetch
 
@@ -72,8 +68,7 @@ Class Confirmation
             Exit Sub
         End If
 
-        Dim resourceData
-        Set resourceData = order.Marshal()
+        Dim resourceData : Set resourceData = order.Marshal()
         If resourceData.status = "checkout_incomplete" Then
             ' Report error
 
@@ -84,8 +79,7 @@ Class Confirmation
         End If
 
         ' Display thank you snippet
-        Dim snippet
-        snippet = resourceData.gui.snippet
+        Dim snippet : snippet = resourceData.gui.snippet
 
         ' DESKTOP: Width of containing block shall be at least 750px
         ' MOBILE: Width of containing block shall be 100% of browser
