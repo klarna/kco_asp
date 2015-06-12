@@ -100,6 +100,7 @@ Class Create
         ' data.Add "recurring", True
 
         order.Create data
+        order.Fetch
 
         If order.HasError = True Then
             Response.Write("Message: " & order.GetError().Marshal().internal_message & "<br/>")
@@ -113,8 +114,9 @@ Class Create
             Exit Sub
         End If
 
-        Response.Write("URL: " & order.GetLocation())
+        Dim resourceData : Set resourceData = order.Marshal()
 
+        Response.Write("Order ID: " & resourceData.id)
     End Sub
 
 End Class
